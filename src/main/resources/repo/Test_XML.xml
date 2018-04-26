@@ -1,0 +1,48 @@
+<test>
+<
+
+</test>
+
+  public static XSDSchema createXSDSchema() {
+         try {
+             // Create a resource set to manage the different resources
+             ResourceSet set = new ResourceSetImpl();
+             set.getResourceFactoryRegistry().getExtensionToFactoryMap()
+                     .put("xsd", new XSDResourceFactoryImpl());
+
+             // Create a resource for this file.
+             Resource resource = set.createResource(URI
+                     .createFileURI("foobar.xsd"));
+             // Create the root XSDSchema object
+             XSDSchema xsdSchema = XSDFactory.eINSTANCE.createXSDSchema();
+             // set the schema for schema QName prefix to "xsd"
+             xsdSchema.setSchemaForSchemaQNamePrefix("xsd");
+             // put the following namespace in the root schema namespace map
+             // xsd:[url=http://www.w3.org/2001/XMLSchema]XML Schema[/url]
+             xsdSchema.getQNamePrefixToNamespaceMap().put(
+                     xsdSchema.getSchemaForSchemaQNamePrefix(),
+                     XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001);
+             // We call updateElement to synchronize the MOF model with the
+             // underlying DOM model
+             // This should only have to be done after creating a new model
+
+             // Add the root schema to the resource that was created above
+             resource.getContents().add(xsdSchema);
+             
+             
+             //now add some content
+             XSDFactory factory = XSDFactory.eINSTANCE;
+             XSDElementDeclaration elementDeclaration = factory.createXSDElementDeclaration();
+             elementDeclaration.setName("Foobar");
+             elementDeclaration.setTypeDefinition(xsdSchema.getSchemaForSchema().getSimpleTypeIdMap().get("string"));
+             
+             xsdSchema.getContents().add(elementDeclaration);
+             
+             // Save the contents of the resource to the file system.
+             resource.save(Collections.EMPTY_MAP);
+             return xsdSchema;
+         } catch (Exception exception) {
+             exception.printStackTrace();
+         }
+         return null;
+     }

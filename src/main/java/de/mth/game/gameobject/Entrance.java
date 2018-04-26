@@ -1,0 +1,51 @@
+package de.mth.game.gameobject;
+
+import java.awt.Graphics;
+
+import de.mth.game.texture.TextureLoader;
+
+public class Entrance extends GameObjectBase {
+
+	public Entrance(int x, int y) {
+		super(x, y);
+		setWidth(32);
+		setHeight(20);
+	}
+
+	@Override
+	public void update() {
+	}
+
+	@Override
+	public void defineTextures(TextureLoader textureLoader) {
+
+	}
+
+	@Override
+	public void render(Graphics g) {
+
+	}
+
+	@Override
+	public void destroy() {
+	}
+
+	@Override
+	public boolean isCollidable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setPerceptionRange(int perceptionRange) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resolveCollision(GameObject gameObject) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
