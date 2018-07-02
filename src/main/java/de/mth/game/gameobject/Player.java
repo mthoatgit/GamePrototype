@@ -2,6 +2,7 @@ package de.mth.game.gameobject;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import de.mth.game.common.Camera;
 import de.mth.game.common.Converter;
@@ -123,50 +124,54 @@ public class Player extends GameObject {
 	}
 
 	@Override
-	public void resolveCollision(GameObject gameObject) {
+	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
-		setCollidingAtNextStep(true);
-		// gameObject.setCollidingAtNextStep(true);
-
-		// if (gameObject instanceof Mountain) {
-		// if (Game.DEBUG) {
-		// System.out.println("Player.resolveCollision()");
-		// }
-		// setVelX(0);
-		// setVelY(0);
-		//
-		// }
-		//
-		// if (gameObject instanceof NPC) {
-		//
-		// dodge(gameObject);
-		//
-		// }
-
-		/*
-		 * TODO: Abfrage welche directions betroffen bzw. mehr als eine Richtung
-		 * -> ansonsten existiert ein Bug bei nebeneinanderliegenden Objekten
-		 * wie Mountain sodass der Player sich an den Objekten vorbeiglitched
-		 */
-
-		if (isCollidingTop(gameObject)) {
-			setVelY(0);
-			// System.out.println("npc.top()");
-		}
-		if (isCollidingBottom(gameObject)) {
-			setVelY(0);
+		if(gameObjects.size() != 0) {
+			GameObject gameObject = gameObjects.get(0);
+			setCollidingAtNextStep(true);
+			// gameObject.setCollidingAtNextStep(true);
+			
+			// if (gameObject instanceof Mountain) {
+			// if (Game.DEBUG) {
+			// System.out.println("Player.resolveCollision()");
+			// }
+			// setVelX(0);
 			// setVelY(0);
-
-			// System.out.println("npc.bottom()");
+			//
+			// }
+			//
+			// if (gameObject instanceof NPC) {
+			//
+			// dodge(gameObject);
+			//
+			// }
+			
+			/*
+			 * TODO: Abfrage welche directions betroffen bzw. mehr als eine Richtung
+			 * -> ansonsten existiert ein Bug bei nebeneinanderliegenden Objekten
+			 * wie Mountain sodass der Player sich an den Objekten vorbeiglitched
+			 */
+			
+			if (isCollidingTop(gameObject)) {
+				setVelY(0);
+				// System.out.println("npc.top()");
+			}
+			if (isCollidingBottom(gameObject)) {
+				setVelY(0);
+				// setVelY(0);
+				
+				// System.out.println("npc.bottom()");
+			}
+			if (isCollidingLeft(gameObject)) {
+				setVelX(0);
+				// System.out.println("npc.left()");
+			}
+			if (isCollidingRight(gameObject)) {
+				setVelX(0);
+				// System.out.println("npc.right()");
+			}
 		}
-		if (isCollidingLeft(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.left()");
-		}
-		if (isCollidingRight(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.right()");
-		}
+		
 
 	}
 

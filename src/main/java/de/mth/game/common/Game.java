@@ -8,6 +8,7 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mth.game.collision.CollisionResolver;
 import de.mth.game.collision.QuadTree;
 import de.mth.game.gameobject.Bullet;
 import de.mth.game.gameobject.GameObject;
@@ -79,7 +80,9 @@ public class Game extends AbstractGame {
 			//
 			// }
 
-			checkCollision();
+			CollisionResolver collisionResolver = new CollisionResolver(gm);
+			collisionResolver.checkCollision();
+
 
 			for (int i = 0; i < gameObjects.size(); i++) {
 				GameObject tempObject = gameObjects.get(i);
@@ -119,7 +122,8 @@ public class Game extends AbstractGame {
 			renderTerrain(g);
 			renderObjects(g);
 
-			g.drawRect((int) cam.getBounds().getX(), (int) cam.getBounds().getY(), (int) cam.getBounds().getWidth(), (int) cam.getBounds().getHeight());
+			g.drawRect((int) cam.getBounds().getX(), (int) cam.getBounds().getY(), (int) cam.getBounds().getWidth(),
+					(int) cam.getBounds().getHeight());
 			g2d.translate(-cam.getX(), -cam.getY());
 			// /////////////
 			g.dispose();
@@ -162,77 +166,78 @@ public class Game extends AbstractGame {
 		}
 	}
 
-	public void checkCollision() {
-		ArrayList<GameObject> collidedObjects = new ArrayList<GameObject>();
-		
-		ArrayList<GameObject> allObjects = new ArrayList<GameObject>();
+	// public void checkCollision() {
+	// ArrayList<GameObject> collidedObjects = new ArrayList<GameObject>();
+	//
+	// ArrayList<GameObject> allObjects = new ArrayList<GameObject>();
+	//
+	// addCollidableGameObjects(allObjects);
+	// addCollidableTerrain(allObjects);
+	//
+	// QuadTree quad = new QuadTree(0, new Rectangle(0, 0, Game.WIDTH,
+	// Game.HEIGHT));
+	//
+	// quad.clear();
+	// for (int i = 0; i < allObjects.size(); i++) {
+	// quad.insert(allObjects.get(i));
+	// }
+	//
+	// List<GameObject> listWithCollidableObjects = new ArrayList<GameObject>();
+	// for (int i = 0; i < allObjects.size(); i++) {
+	//
+	// // Return all objects that could collide with the given object
+	// listWithCollidableObjects.clear();
+	// GameObject checkObject = allObjects.get(i);
+	// quad.retrieve(listWithCollidableObjects, checkObject);
+	//
+	// for (int j = 0; j < listWithCollidableObjects.size(); j++) {
+	//
+	// // getNextStep
+	// Rectangle returnBounds = listWithCollidableObjects.get(j).getNextStep();
+	// Rectangle allObjectsBounds = checkObject.getNextStep();
+	//
+	// if (returnBounds.intersects(allObjectsBounds)) {
+	// // Same?
+	// if (!checkObject.equals(listWithCollidableObjects.get(j))) {
+	//
+	// GameObject collidedObject = listWithCollidableObjects.get(j);
+	//
+	// collidedObjects.add(collidedObject);
+	//
+	// // allObjects.get(i).resolveCollision(returnObjects.get(j));
+	// checkObject.resolveCollision(listWithCollidableObjects.get(j));
+	//// listWithCollidableObjects.get(j).resolveCollision(checkObject);
+	//
+	// }
+	// }
+	// }
+	// }
+	//
+	//
+	//
+	//
+	// }
 
-		addCollidableGameObjects(allObjects);
-		addCollidableTerrain(allObjects);
-
-		QuadTree quad = new QuadTree(0, new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
-
-		quad.clear();
-		for (int i = 0; i < allObjects.size(); i++) {
-			quad.insert(allObjects.get(i));
-		}
-
-		List<GameObject> listWithCollidableObjects = new ArrayList<GameObject>();
-		for (int i = 0; i < allObjects.size(); i++) {
-
-			// Return all objects that could collide with the given object
-			listWithCollidableObjects.clear();
-			GameObject checkObject = allObjects.get(i);
-			quad.retrieve(listWithCollidableObjects, checkObject);
-
-			for (int j = 0; j < listWithCollidableObjects.size(); j++) {
-
-				// getNextStep
-				Rectangle returnBounds = listWithCollidableObjects.get(j).getNextStep();
-				Rectangle allObjectsBounds = checkObject.getNextStep();
-
-				if (returnBounds.intersects(allObjectsBounds)) {
-					// Same?
-					if (!checkObject.equals(listWithCollidableObjects.get(j))) {
-
-						GameObject collidedObject = listWithCollidableObjects.get(j);
-						
-						collidedObjects.add(collidedObject);
-						
-						// allObjects.get(i).resolveCollision(returnObjects.get(j));
-						checkObject.resolveCollision(listWithCollidableObjects.get(j));
-//						listWithCollidableObjects.get(j).resolveCollision(checkObject);
-
-					}
-				}
-			}
-		}
-		
-		
-		
-
-	}
-
-	private void addCollidableTerrain(ArrayList<GameObject> allObjects) {
-		GameObject[][] terrain = gm.getTerrain();
-		for (int col = 0; col < terrain.length; col++) {
-			for (int row = 0; row < terrain[0].length; row++) {
-				GameObject gameObject = terrain[col][row];
-				if (gameObject.isCollidable()) {
-					allObjects.add(gameObject);
-				}
-			}
-		}
-	}
-
-	private void addCollidableGameObjects(ArrayList<GameObject> allObjects) {
-		for (int i = 0; i < gm.getGameObjects().size(); i++) {
-			GameObject gameObject = gm.getGameObjects().get(i);
-			if (gm.getGameObjects().get(i).isCollidable()) {
-				allObjects.add(gameObject);
-			}
-		}
-	}
+	// private void addCollidableTerrain(ArrayList<GameObject> allObjects) {
+	// GameObject[][] terrain = gm.getTerrain();
+	// for (int col = 0; col < terrain.length; col++) {
+	// for (int row = 0; row < terrain[0].length; row++) {
+	// GameObject gameObject = terrain[col][row];
+	// if (gameObject.isCollidable()) {
+	// allObjects.add(gameObject);
+	// }
+	// }
+	// }
+	// }
+	//
+	// private void addCollidableGameObjects(ArrayList<GameObject> allObjects) {
+	// for (int i = 0; i < gm.getGameObjects().size(); i++) {
+	// GameObject gameObject = gm.getGameObjects().get(i);
+	// if (gm.getGameObjects().get(i).isCollidable()) {
+	// allObjects.add(gameObject);
+	// }
+	// }
+	// }
 
 	private int renderTerrain(Graphics g) {
 		GameObject[][] terrain = gm.getTerrain();
@@ -272,7 +277,8 @@ public class Game extends AbstractGame {
 
 						g.setColor(Color.RED);
 						Rectangle nextStep = tempObject.getNextStep();
-						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
+						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(),
+								(int) nextStep.getHeight());
 
 					}
 				}

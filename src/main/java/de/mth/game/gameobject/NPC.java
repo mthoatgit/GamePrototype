@@ -99,16 +99,21 @@ public class NPC extends GameObject {
 	}
 
 	@Override
-	public void resolveCollision(GameObject gameObject) {
-		setCollidingAtNextStep(true);
-		if (gameObject instanceof Bullet) {
-			destroy();
-		}
+	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
-		if (gameObject instanceof Player || gameObject instanceof Mountain) {
-			gameObject.setCollidingAtNextStep(true);
-			dodge(gameObject);
+		if (gameObjects.size() != 0) {
+			GameObject gameObject = gameObjects.get(0);
 
+			setCollidingAtNextStep(true);
+			if (gameObject instanceof Bullet) {
+				destroy();
+			}
+
+			if (gameObject instanceof Player || gameObject instanceof Mountain) {
+				gameObject.setCollidingAtNextStep(true);
+				dodge(gameObject);
+
+			}
 		}
 	}
 

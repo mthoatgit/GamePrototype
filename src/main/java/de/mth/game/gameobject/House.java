@@ -110,9 +110,9 @@ public class House extends GameObject {
 	}
 
 	@Override
-	public void resolveCollision(GameObject gameObject) {
+	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

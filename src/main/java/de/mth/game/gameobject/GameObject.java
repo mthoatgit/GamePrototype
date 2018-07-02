@@ -3,6 +3,7 @@ package de.mth.game.gameobject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import de.mth.game.pathfinding.Path;
 import de.mth.game.texture.Texture;
@@ -366,7 +367,7 @@ public abstract class GameObject{
 	
 	public abstract void destroy();
 
-	public abstract void resolveCollision(GameObject gameObject);
+	public abstract void resolveCollision(ArrayList<GameObject> gameObject);
 
 	public abstract void setPerceptionRange(int perceptionRange);
 

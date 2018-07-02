@@ -1,6 +1,7 @@
 package de.mth.game.gameobject;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import de.mth.game.texture.TextureLoader;
 
@@ -46,9 +47,9 @@ public class Grass extends GameObject {
 	}
 
 	@Override
-	public void resolveCollision(GameObject gameObject) {
+	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }
