@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Grass extends GameObjectBase {
+public class Grass extends GameObject {
 
 	public Grass(int x, int y) {
 		super(x, y);

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Bullet extends GameObjectBase {
+public class Bullet extends GameObject {
 
 	public Bullet(int x, int y, float destX, float destY) {
 		super(x, y);

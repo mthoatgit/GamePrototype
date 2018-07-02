@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Mountain extends GameObjectBase {
+public class Mountain extends GameObject {
 
 	public Mountain(int x, int y) {
 		super(x, y);

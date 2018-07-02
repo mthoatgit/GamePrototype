@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class Window {
 
-public Window(int w, int h, String title, Game game){
+public Window(int w, int h, String title, AbstractGame game){
 		
 		game.setPreferredSize(new Dimension(w, h));
 		game.setMaximumSize(new Dimension(w, h));

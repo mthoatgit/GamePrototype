@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Entrance extends GameObjectBase {
+public class Entrance extends GameObject {
 
 	public Entrance(int x, int y) {
 		super(x, y);

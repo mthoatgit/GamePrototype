@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import de.mth.game.texture.Part;
 import de.mth.game.texture.TextureLoader;
 
-public class House extends GameObjectBase {
+public class House extends GameObject {
 
 	ArrayList<Part> parts;
 

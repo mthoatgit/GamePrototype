@@ -10,7 +10,7 @@ import de.mth.game.common.Main;
 import de.mth.game.texture.Animation;
 import de.mth.game.texture.TextureLoader;
 
-public class NPC extends GameObjectBase {
+public class NPC extends GameObject {
 
 	private Animation playerWalk;
 
