@@ -44,7 +44,6 @@ public class Game extends AbstractGame {
 		this.addMouseMotionListener(gm.getInput());
 
 		this.requestFocus();
-
 	}
 
 	protected void input() {
@@ -164,6 +163,8 @@ public class Game extends AbstractGame {
 	}
 
 	public void checkCollision() {
+		ArrayList<GameObject> collidedObjects = new ArrayList<GameObject>();
+		
 		ArrayList<GameObject> allObjects = new ArrayList<GameObject>();
 
 		addCollidableGameObjects(allObjects);
@@ -176,30 +177,39 @@ public class Game extends AbstractGame {
 			quad.insert(allObjects.get(i));
 		}
 
-		List<GameObject> returnObjects = new ArrayList<GameObject>();
+		List<GameObject> listWithCollidableObjects = new ArrayList<GameObject>();
 		for (int i = 0; i < allObjects.size(); i++) {
 
 			// Return all objects that could collide with the given object
-			returnObjects.clear();
-			quad.retrieve(returnObjects, allObjects.get(i));
+			listWithCollidableObjects.clear();
+			GameObject checkObject = allObjects.get(i);
+			quad.retrieve(listWithCollidableObjects, checkObject);
 
-			for (int j = 0; j < returnObjects.size(); j++) {
+			for (int j = 0; j < listWithCollidableObjects.size(); j++) {
 
 				// getNextStep
-				Rectangle returnBounds = returnObjects.get(j).getNextStep();
-				Rectangle allObjectsBounds = allObjects.get(i).getNextStep();
+				Rectangle returnBounds = listWithCollidableObjects.get(j).getNextStep();
+				Rectangle allObjectsBounds = checkObject.getNextStep();
 
 				if (returnBounds.intersects(allObjectsBounds)) {
 					// Same?
-					if (!allObjects.get(i).equals(returnObjects.get(j))) {
+					if (!checkObject.equals(listWithCollidableObjects.get(j))) {
 
+						GameObject collidedObject = listWithCollidableObjects.get(j);
+						
+						collidedObjects.add(collidedObject);
+						
 						// allObjects.get(i).resolveCollision(returnObjects.get(j));
-						returnObjects.get(j).resolveCollision(allObjects.get(i));
+						checkObject.resolveCollision(listWithCollidableObjects.get(j));
+//						listWithCollidableObjects.get(j).resolveCollision(checkObject);
 
 					}
 				}
 			}
 		}
+		
+		
+		
 
 	}
 
