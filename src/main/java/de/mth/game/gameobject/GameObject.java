@@ -104,28 +104,36 @@ public abstract class GameObject {
 		return vel;
 	}
 
+	public float getTop() {
+		return getY();
+	}
+
 	public float getBottom() {
-		return ((float) getBounds().getY()) + getHeight();
+		return getY() + getHeight();
+	}
+
+	public float getLeft() {
+		return getX();
 	}
 
 	public float getRight() {
-		return ((float) getBounds().getX()) + getWidth();
+		return getX() + getWidth();
 	}
 
 	public double getLeftCollision(GameObject collidingObject) {
-		return getRight() - collidingObject.getX();
+		return getLeft() - collidingObject.getRight();
 	}
 
 	public double getRightCollision(GameObject collidingObject) {
-		return collidingObject.getRight() - getBounds().getX();
+		return getRight() - getLeft();
 	}
 
 	public double getTopCollision(GameObject collidingObject) {
-		return getBottom() - collidingObject.getY();
+		return getTop() - collidingObject.getBottom();
 	}
 
 	public double getBottomCollision(GameObject collidingObject) {
-		return collidingObject.getBottom() - getBounds().getY();
+		return getBottom() - collidingObject.getTop();
 	}
 
 	public boolean isCollidingBottom(GameObject collidingObject) {
