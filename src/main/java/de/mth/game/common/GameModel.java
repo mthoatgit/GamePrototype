@@ -1,17 +1,11 @@
 package de.mth.game.common;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.image.*;
+import java.util.*;
 
-import de.mth.game.gameobject.Entrance;
-import de.mth.game.gameobject.GameObject;
-import de.mth.game.gameobject.Grass;
-import de.mth.game.gameobject.House;
-import de.mth.game.gameobject.Mountain;
-import de.mth.game.gameobject.NPC;
-import de.mth.game.gameobject.Player;
-import de.mth.game.texture.BufferedImageLoader;
+import de.mth.game.gameobject.*;
+import de.mth.game.texture.*;
 
 public class GameModel {
 

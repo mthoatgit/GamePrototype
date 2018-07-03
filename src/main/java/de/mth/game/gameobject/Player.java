@@ -1,16 +1,10 @@
 package de.mth.game.gameobject;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 
-import de.mth.game.common.Camera;
-import de.mth.game.common.Converter;
-import de.mth.game.common.Game;
-import de.mth.game.common.GameModel;
-import de.mth.game.common.Input;
-import de.mth.game.texture.Animation;
-import de.mth.game.texture.TextureLoader;
+import de.mth.game.common.*;
+import de.mth.game.texture.*;
 
 public class Player extends GameObject {
 
@@ -126,11 +120,16 @@ public class Player extends GameObject {
 	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
-		if(gameObjects.size() != 0) {
-			GameObject gameObject = gameObjects.get(0);
+		boolean left = true;
+		boolean right = true;
+		boolean top = true;
+		boolean bottom = true;
+
+		if (gameObjects.size() != 0) {
+
 			setCollidingAtNextStep(true);
 			// gameObject.setCollidingAtNextStep(true);
-			
+
 			// if (gameObject instanceof Mountain) {
 			// if (Game.DEBUG) {
 			// System.out.println("Player.resolveCollision()");
@@ -145,33 +144,96 @@ public class Player extends GameObject {
 			// dodge(gameObject);
 			//
 			// }
-			
+
 			/*
-			 * TODO: Abfrage welche directions betroffen bzw. mehr als eine Richtung
-			 * -> ansonsten existiert ein Bug bei nebeneinanderliegenden Objekten
-			 * wie Mountain sodass der Player sich an den Objekten vorbeiglitched
+			 * TODO: Abfrage welche directions betroffen bzw. mehr als eine
+			 * Richtung -> ansonsten existiert ein Bug bei
+			 * nebeneinanderliegenden Objekten wie Mountain sodass der Player
+			 * sich an den Objekten vorbeiglitched
 			 */
-			
-			if (isCollidingTop(gameObject)) {
+			// if (gameObjects.size() != 0) {
+			for (GameObject gameObject : gameObjects) {
+				// GameObject gameObject = gameObjects.get(0);
+
+				if (isCollidingTop(gameObject)) {
+					top = false;
+					// setVelY(0);
+					// System.out.println("npc.top()");
+				}
+				if (isCollidingBottom(gameObject)) {
+					bottom = false;
+					// setVelY(0);
+					// setVelY(0);
+
+					// System.out.println("npc.bottom()");
+				}
+				if (isCollidingLeft(gameObject)) {
+					left = false;
+					// setVelX(0);
+					// System.out.println("npc.left()");
+				}
+				if (isCollidingRight(gameObject)) {
+					right = false;
+					// setVelX(0);
+					// System.out.println("npc.right()");
+				}
+
+			}
+
+			// }
+
+			// if (gameObjects.size() > 1) {
+			// if (isCollidingTop(gameObject)) {
+			// setVelY(0);
+			// // System.out.println("npc.top()");
+			// }
+			// if (isCollidingBottom(gameObject)) {
+			// setVelY(0);
+			// // setVelY(0);
+			//
+			// // System.out.println("npc.bottom()");
+			// }
+			// if (isCollidingLeft(gameObject)) {
+			// if (getVelX() < 0) {
+			//
+			// setVelX(0);
+			// }
+			// // System.out.println("npc.left()");
+			// }
+			// if (isCollidingRight(gameObject)) {
+			// if (getVelY() > 0) {
+			// setVelX(0);
+			// }
+			// // System.out.println("npc.right()");
+			// }
+			// }
+		}
+
+		if (!bottom) {
+			if (getVelY() > 0) {
 				setVelY(0);
-				// System.out.println("npc.top()");
-			}
-			if (isCollidingBottom(gameObject)) {
-				setVelY(0);
-				// setVelY(0);
-				
-				// System.out.println("npc.bottom()");
-			}
-			if (isCollidingLeft(gameObject)) {
-				setVelX(0);
-				// System.out.println("npc.left()");
-			}
-			if (isCollidingRight(gameObject)) {
-				setVelX(0);
-				// System.out.println("npc.right()");
 			}
 		}
-		
+
+		if (!top) {
+			if (getVelY() < 0) {
+				setVelY(0);
+			}
+		}
+
+		if (!right) {
+			if (getVelX() > 0) {
+
+				setVelX(0);
+			}
+		}
+
+		if (!left) {
+			if (getVelX() < 0) {
+
+				setVelX(0);
+			}
+		}
 
 	}
 

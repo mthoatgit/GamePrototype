@@ -1,14 +1,10 @@
 package de.mth.game.gameobject;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.*;
+import java.awt.image.*;
+import java.util.*;
 
-import de.mth.game.common.Main;
-import de.mth.game.texture.Animation;
-import de.mth.game.texture.TextureLoader;
+import de.mth.game.texture.*;
 
 public class NPC extends GameObject {
 
@@ -53,7 +49,7 @@ public class NPC extends GameObject {
 		y += getVelY();
 
 		if (isAtDestination()) {
-			wander();
+			// wander();
 
 		}
 
@@ -63,7 +59,7 @@ public class NPC extends GameObject {
 	public void wander() {
 
 		Random random = new Random();
-		setDestination(random.nextInt(Main.WIDTH), random.nextInt(Main.HEIGHT));
+		setDestination(random.nextInt(Window.WIDTH), random.nextInt(Window.HEIGHT));
 
 	}
 
@@ -114,6 +110,29 @@ public class NPC extends GameObject {
 				dodge(gameObject);
 
 			}
+		}
+	}
+
+	public void dodge(GameObject gameObject) {
+		setVelocity(getVelocity());
+
+		if (isCollidingTop(gameObject)) {
+			setVelY(0);
+			// System.out.println("npc.top()");
+		}
+		if (isCollidingBottom(gameObject)) {
+			setVelY(0);
+			// setVelY(0);
+
+			// System.out.println("npc.bottom()");
+		}
+		if (isCollidingLeft(gameObject)) {
+			setVelX(0);
+			// System.out.println("npc.left()");
+		}
+		if (isCollidingRight(gameObject)) {
+			setVelX(0);
+			// System.out.println("npc.right()");
 		}
 	}
 

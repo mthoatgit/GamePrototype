@@ -1,15 +1,12 @@
 package de.mth.game.gameobject;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 
-import de.mth.game.pathfinding.Path;
-import de.mth.game.texture.Texture;
-import de.mth.game.texture.TextureLoader;
+import de.mth.game.pathfinding.*;
+import de.mth.game.texture.*;
 
-public abstract class GameObject{
+public abstract class GameObject {
 
 	protected float x, y;
 
@@ -131,7 +128,7 @@ public abstract class GameObject{
 		return collidingObject.getBottom() - getBounds().getY();
 	}
 
-	public boolean isCollidingTop(GameObject collidingObject) {
+	public boolean isCollidingBottom(GameObject collidingObject) {
 		double t = getTopCollision(collidingObject);
 		double b = getBottomCollision(collidingObject);
 		double l = getLeftCollision(collidingObject);
@@ -140,7 +137,7 @@ public abstract class GameObject{
 		return t < b && t < l && t < r;
 	}
 
-	public boolean isCollidingBottom(GameObject collidingObject) {
+	public boolean isCollidingTop(GameObject collidingObject) {
 		double t = getTopCollision(collidingObject);
 		double b = getBottomCollision(collidingObject);
 		double l = getLeftCollision(collidingObject);
@@ -171,10 +168,6 @@ public abstract class GameObject{
 		return getVelocity(getDestinationX(), getDestinationY());
 	}
 
-	public float[] getVelocity(GameObject gameObject) {
-		return getVelocity(getDestinationX(), getDestinationY());
-	}
-
 	public void setVelocity(float[] velocity) {
 		setVelX(velocity[0]);
 		setVelY(velocity[1]);
@@ -190,29 +183,6 @@ public abstract class GameObject{
 		Rectangle dest = new Rectangle((int) getDestinationX() - 1, (int) getDestinationY() - 1, 2, 2);
 		Rectangle pos = new Rectangle((int) getX() - 1, (int) getY() - 1, 2, 2);
 		return dest.intersects(pos);
-	}
-
-	public void dodge(GameObject gameObject) {
-		setVelocity(getVelocity());
-
-		if (isCollidingTop(gameObject)) {
-			setVelY(0);
-			// System.out.println("npc.top()");
-		}
-		if (isCollidingBottom(gameObject)) {
-			setVelY(0);
-			// setVelY(0);
-
-			// System.out.println("npc.bottom()");
-		}
-		if (isCollidingLeft(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.left()");
-		}
-		if (isCollidingRight(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.right()");
-		}
 	}
 
 	public float getX() {
@@ -236,6 +206,9 @@ public abstract class GameObject{
 	}
 
 	public void setWidth(float width) {
+		if (this instanceof Player) {
+			System.out.println("GameObject.setWidth()");
+		}
 		this.width = width;
 	}
 
@@ -362,9 +335,9 @@ public abstract class GameObject{
 	public abstract void defineTextures(TextureLoader textureLoader);
 
 	public abstract void render(Graphics g);
-	
+
 	public abstract void update();
-	
+
 	public abstract void destroy();
 
 	public abstract void resolveCollision(ArrayList<GameObject> gameObject);
