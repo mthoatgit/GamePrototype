@@ -94,6 +94,40 @@ public class GameModel {
 	public void setInput(Input input) {
 		this.input = input;
 	}
+	
+	public ArrayList<GameObject> getAllCollidableGameObjects() {
+		ArrayList<GameObject> allCollidableGameObjects = new ArrayList<>();
+		allCollidableGameObjects.addAll(getCollidableTerrain());
+		allCollidableGameObjects.addAll(getCollidableGameObjects());
+		return allCollidableGameObjects;
+	}
+	
+	private ArrayList<GameObject> getCollidableTerrain() {
+		GameObject[][] terrain = getTerrain();
+		ArrayList<GameObject> collidableTerrain = new ArrayList<>();
+		for (int col = 0; col < terrain.length; col++) {
+			for (int row = 0; row < terrain[0].length; row++) {
+				GameObject gameObject = terrain[col][row];
+				if (gameObject.isCollidable()) {
+					collidableTerrain.add(gameObject);
+				}
+			}
+		}
+		return collidableTerrain;
+	}
+
+	private ArrayList<GameObject> getCollidableGameObjects() {
+		ArrayList<GameObject> collidableGameObjects = new ArrayList<>();
+		for (int i = 0; i < getGameObjects().size(); i++) {
+			GameObject gameObject = getGameObjects().get(i);
+			if (getGameObjects().get(i).isCollidable()) {
+				collidableGameObjects.add(gameObject);
+			}
+		}
+		return collidableGameObjects;
+	}
+
+	
 
 	/*
 	 * Es muss ein Array sein aus Performance-Gründen. Bitte mach den Fehler

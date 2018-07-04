@@ -26,7 +26,11 @@ public class CollisionDirectionDetector {
 	// return checkGameObject.getBottom() - otherGameObject.getTop();
 	// }
 
-	public int getDirection(GameObject check, GameObject other) {
+	public enum Direction {
+		LEFT, RIGHT, TOP, BOTTOM
+	}
+	
+	public Direction getDirection(GameObject check, GameObject other) {
 
 		Double inf = Double.MAX_VALUE;
 		Double[] array = new Double[] { inf, inf, inf, inf };
@@ -56,24 +60,55 @@ public class CollisionDirectionDetector {
 
 		List<Double> asList = Arrays.asList(array);
 		int indexOf = asList.indexOf(Collections.min(asList));
-		return indexOf;
+		
+		 switch(indexOf){ 
+	        case 0: 
+	            return Direction.LEFT;
+	        case 1: 
+	        	return Direction.RIGHT;
+	        case 2: 
+	        	return Direction.TOP;
+	        case 3: 
+	        	return Direction.BOTTOM;
+	        default: 
+	        	System.out.println("CollisionDirectionDetector.getDirection()");
+	        } 
+		 return null;
 	}
 
-	// public boolean isCollidingBottom(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// }
-	//
-	// public boolean isCollidingTop(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// }
-	//
-	// public boolean isCollidingRight(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// }
-	//
-	// public boolean isCollidingLeft(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// }
+//	public boolean isCollidingRight(GameObject checkGameObject, GameObject otherGameObject) {
+//		int direction = getDirection(checkGameObject, otherGameObject);
+//		if(direction == 0) {
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	public boolean isCollidingLeft(GameObject checkGameObject, GameObject otherGameObject) {
+//		int direction = getDirection(checkGameObject, otherGameObject);
+//		if(direction == 1) {
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	public boolean isCollidingTop(GameObject checkGameObject, GameObject otherGameObject) {
+//		int direction = getDirection(checkGameObject, otherGameObject);
+//		if(direction == 2) {
+//			return true;
+//		}
+//		return false;
+//	}
+//	
+//	public boolean isCollidingBottom(GameObject checkGameObject, GameObject otherGameObject) {
+//		int direction = getDirection(checkGameObject, otherGameObject);
+//		if(direction == 3) {
+//			return true;
+//		}
+//		return false;
+//	}
+
+	
 
 	// public boolean isCollidingBottom(GameObject checkGameObject, GameObject
 	// otherGameObject) {

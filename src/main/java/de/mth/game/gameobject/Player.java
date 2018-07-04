@@ -3,6 +3,8 @@ package de.mth.game.gameobject;
 import java.awt.*;
 import java.util.*;
 
+import de.mth.game.collision.CollisionDirectionDetector;
+import de.mth.game.collision.CollisionDirectionDetector.Direction;
 import de.mth.game.common.*;
 import de.mth.game.texture.*;
 
@@ -119,121 +121,48 @@ public class Player extends GameObject {
 
 	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
-
 		boolean left = true;
 		boolean right = true;
 		boolean top = true;
 		boolean bottom = true;
 
-		if (gameObjects.size() != 0) {
+		setCollidingAtNextStep(true);
+		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
-			setCollidingAtNextStep(true);
-			// gameObject.setCollidingAtNextStep(true);
+		for (GameObject gameObject : gameObjects) {
 
-			// if (gameObject instanceof Mountain) {
-			// if (Game.DEBUG) {
-			// System.out.println("Player.resolveCollision()");
-			// }
-			// setVelX(0);
-			// setVelY(0);
-			//
-			// }
-			//
-			// if (gameObject instanceof NPC) {
-			//
-			// dodge(gameObject);
-			//
-			// }
+			Direction direction = collisionDirectionDetector.getDirection(this, gameObject);
+			
+			 switch(direction){ 
+		        case LEFT: 
+		        	if (getVelX() < 0) {
+						setVelX(0);
+					}
+		        	break;
+		        case RIGHT:
+		        	if (getVelX() > 0) {
 
-			/*
-			 * TODO: Abfrage welche directions betroffen bzw. mehr als eine
-			 * Richtung -> ansonsten existiert ein Bug bei
-			 * nebeneinanderliegenden Objekten wie Mountain sodass der Player
-			 * sich an den Objekten vorbeiglitched
-			 */
-			// if (gameObjects.size() != 0) {
-			for (GameObject gameObject : gameObjects) {
-				// GameObject gameObject = gameObjects.get(0);
-
-				if (isCollidingTop(gameObject)) {
-					top = false;
-					// setVelY(0);
-					// System.out.println("npc.top()");
-				}
-				if (isCollidingBottom(gameObject)) {
-					bottom = false;
-					// setVelY(0);
-					// setVelY(0);
-
-					// System.out.println("npc.bottom()");
-				}
-				if (isCollidingLeft(gameObject)) {
-					left = false;
-					// setVelX(0);
-					// System.out.println("npc.left()");
-				}
-				if (isCollidingRight(gameObject)) {
-					right = false;
-					// setVelX(0);
-					// System.out.println("npc.right()");
-				}
-
-			}
-
-			// }
-
-			// if (gameObjects.size() > 1) {
-			// if (isCollidingTop(gameObject)) {
-			// setVelY(0);
-			// // System.out.println("npc.top()");
-			// }
-			// if (isCollidingBottom(gameObject)) {
-			// setVelY(0);
-			// // setVelY(0);
-			//
-			// // System.out.println("npc.bottom()");
-			// }
-			// if (isCollidingLeft(gameObject)) {
-			// if (getVelX() < 0) {
-			//
-			// setVelX(0);
-			// }
-			// // System.out.println("npc.left()");
-			// }
-			// if (isCollidingRight(gameObject)) {
-			// if (getVelY() > 0) {
-			// setVelX(0);
-			// }
-			// // System.out.println("npc.right()");
-			// }
-			// }
+						setVelX(0);
+					}
+		        	break;
+		        case TOP: 
+		        	if (getVelY() < 0) {
+						setVelY(0);
+					}
+		        	break;
+		        case BOTTOM:
+		        	if (getVelY() > 0) {
+						setVelY(0);
+					}
+		        	break;
+		        default: 
+		        	System.out.println("CollisionDirectionDetector.getDirection()");
+		        } 
+			
+			
+			
 		}
 
-		if (!bottom) {
-			if (getVelY() > 0) {
-				setVelY(0);
-			}
-		}
-
-		if (!top) {
-			if (getVelY() < 0) {
-				setVelY(0);
-			}
-		}
-
-		if (!right) {
-			if (getVelX() > 0) {
-
-				setVelX(0);
-			}
-		}
-
-		if (!left) {
-			if (getVelX() < 0) {
-
-				setVelX(0);
-			}
-		}
 
 	}
 

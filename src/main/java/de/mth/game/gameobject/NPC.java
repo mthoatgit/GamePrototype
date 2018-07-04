@@ -116,24 +116,24 @@ public class NPC extends GameObject {
 	public void dodge(GameObject gameObject) {
 		setVelocity(getVelocity());
 
-		if (isCollidingTop(gameObject)) {
-			setVelY(0);
-			// System.out.println("npc.top()");
-		}
-		if (isCollidingBottom(gameObject)) {
-			setVelY(0);
-			// setVelY(0);
-
-			// System.out.println("npc.bottom()");
-		}
-		if (isCollidingLeft(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.left()");
-		}
-		if (isCollidingRight(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.right()");
-		}
+//		if (isCollidingTop(gameObject)) {
+//			setVelY(0);
+//			// System.out.println("npc.top()");
+//		}
+//		if (isCollidingBottom(gameObject)) {
+//			setVelY(0);
+//			// setVelY(0);
+//
+//			// System.out.println("npc.bottom()");
+//		}
+//		if (isCollidingLeft(gameObject)) {
+//			setVelX(0);
+//			// System.out.println("npc.left()");
+//		}
+//		if (isCollidingRight(gameObject)) {
+//			setVelX(0);
+//			// System.out.println("npc.right()");
+//		}
 	}
 
 }

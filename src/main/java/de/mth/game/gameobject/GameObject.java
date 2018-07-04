@@ -120,57 +120,6 @@ public abstract class GameObject {
 		return getX() + getWidth();
 	}
 
-	public double getLeftCollision(GameObject collidingObject) {
-		return getLeft() - collidingObject.getRight();
-	}
-
-	public double getRightCollision(GameObject collidingObject) {
-		return getRight() - getLeft();
-	}
-
-	public double getTopCollision(GameObject collidingObject) {
-		return getTop() - collidingObject.getBottom();
-	}
-
-	public double getBottomCollision(GameObject collidingObject) {
-		return getBottom() - collidingObject.getTop();
-	}
-
-	public boolean isCollidingBottom(GameObject collidingObject) {
-		double t = getTopCollision(collidingObject);
-		double b = getBottomCollision(collidingObject);
-		double l = getLeftCollision(collidingObject);
-		double r = getRightCollision(collidingObject);
-
-		return t < b && t < l && t < r;
-	}
-
-	public boolean isCollidingTop(GameObject collidingObject) {
-		double t = getTopCollision(collidingObject);
-		double b = getBottomCollision(collidingObject);
-		double l = getLeftCollision(collidingObject);
-		double r = getRightCollision(collidingObject);
-
-		return b < t && b < l && b < r;
-	}
-
-	public boolean isCollidingRight(GameObject collidingObject) {
-		double t = getTopCollision(collidingObject);
-		double b = getBottomCollision(collidingObject);
-		double l = getLeftCollision(collidingObject);
-		double r = getRightCollision(collidingObject);
-
-		return r < l && r < t && r < b;
-	}
-
-	public boolean isCollidingLeft(GameObject collidingObject) {
-		double t = getTopCollision(collidingObject);
-		double b = getBottomCollision(collidingObject);
-		double l = getLeftCollision(collidingObject);
-		double r = getRightCollision(collidingObject);
-
-		return l < r && l < t && l < b;
-	}
 
 	public float[] getVelocity() {
 		return getVelocity(getDestinationX(), getDestinationY());
@@ -338,6 +287,15 @@ public abstract class GameObject {
 
 	public void setCollidingAtNextStep(boolean collidingAtNextStep) {
 		this.collidingAtNextStep = collidingAtNextStep;
+	}
+	
+	public boolean isCollidingWith(GameObject otherObject) {
+		return this.getBounds().intersects(otherObject.getBounds());
+		
+	}
+	
+	public boolean isCollidingAtNextStepWith(GameObject otherObject) {
+		return this.getNextStep().intersects(otherObject.getNextStep());
 	}
 
 	public abstract void defineTextures(TextureLoader textureLoader);

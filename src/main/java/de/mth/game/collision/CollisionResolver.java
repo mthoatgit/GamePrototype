@@ -15,22 +15,7 @@ public class CollisionResolver {
 		this.gameModel = gameModel;
 	}
 
-	public GameModel getGameModel() {
-		return gameModel;
-	}
-
-	public void setGameModel(GameModel gameModel) {
-		this.gameModel = gameModel;
-	}
-
-	public ArrayList<GameObject> getAllCollidableGameObjects() {
-		ArrayList<GameObject> allCollidableGameObjects = new ArrayList<>();
-		allCollidableGameObjects.addAll(getCollidableTerrain());
-		allCollidableGameObjects.addAll(getCollidableGameObjects());
-		return allCollidableGameObjects;
-	}
-
-	public void checkCollision(ArrayList<GameObject> allObjects) {
+	public Map<GameObject, ArrayList<GameObject>> getCollidedObjects(ArrayList<GameObject> allObjects) {
 
 		Map<GameObject, ArrayList<GameObject>> objectsToResolveMap = new HashMap<>();
 
@@ -49,27 +34,18 @@ public class CollisionResolver {
 
 			// Return all objects that could collide with the given object
 			collidableObjectsList = quad.retrieve(collidableObjectsList, checkObject);
+			
+			// Return all real collisions
 			ArrayList<GameObject> collidedObjectsList = getCollidedObjectsList(checkObject, collidableObjectsList);
-
+			
 			if (collidedObjectsList.size() > 0) {
-
 				objectsToResolveMap.put(checkObject, collidedObjectsList);
 			}
-
-			// resolveCollisions(objectsToResolveMap);
-
-			if (collidedObjectsList.size() != 0) {
-
-				checkObject.resolveCollision(collidedObjectsList);
-
-			}
-			if (checkObject instanceof Player) {
-				System.out.println("CollisionResolver.checkCollision()");
-			}
 		}
+		return objectsToResolveMap;
 	}
 
-	private void resolveCollisions(Map<GameObject, ArrayList<GameObject>> objectsToResolveMap) {
+	public void resolveCollisions(Map<GameObject, ArrayList<GameObject>> objectsToResolveMap) {
 		objectsToResolveMap.forEach((k, v) -> k.resolveCollision(v));
 	}
 
@@ -79,30 +55,17 @@ public class CollisionResolver {
 
 			GameObject collidableObject = collidableObjectsList.get(j);
 
-			// getNextStep
-			Rectangle collidableObjectBounds = collidableObject.getNextStep();
-			Rectangle checkObjectBounds = checkObject.getNextStep();
+//			// getNextStep
+//			Rectangle collidableObjectBounds = collidableObject.getNextStep();
+//			Rectangle checkObjectBounds = checkObject.getNextStep();
 
-			// Kollision?
-			if (collidableObjectBounds.intersects(checkObjectBounds)) {
+			// Kollision beim nächsten Step?
+			if (collidableObject.isCollidingAtNextStepWith(checkObject)) {
 
 				// Mit sich selbst?
 				if (!checkObject.equals(collidableObject)) {
-
-					// if (checkObject instanceof NPC) {
-					// System.out.println("CollisionResolver.checkCollision()
-					// NPC 1");
-					// if (collidableObject instanceof Mountain) {
-					//
-					// System.out.println("CollisionResolver.checkCollision()
-					// NPC 2");
-					// }
-					// }
-
 					GameObject collidedObject = collidableObjectsList.get(j);
-
 					collidedObjectsList.add(collidedObject);
-
 				}
 			}
 
@@ -110,30 +73,5 @@ public class CollisionResolver {
 
 		return collidedObjectsList;
 	}
-
-	private ArrayList<GameObject> getCollidableTerrain() {
-		GameObject[][] terrain = gameModel.getTerrain();
-		ArrayList<GameObject> collidableTerrain = new ArrayList<>();
-		for (int col = 0; col < terrain.length; col++) {
-			for (int row = 0; row < terrain[0].length; row++) {
-				GameObject gameObject = terrain[col][row];
-				if (gameObject.isCollidable()) {
-					collidableTerrain.add(gameObject);
-				}
-			}
-		}
-		return collidableTerrain;
-	}
-
-	private ArrayList<GameObject> getCollidableGameObjects() {
-		ArrayList<GameObject> collidableGameObjects = new ArrayList<>();
-		for (int i = 0; i < gameModel.getGameObjects().size(); i++) {
-			GameObject gameObject = gameModel.getGameObjects().get(i);
-			if (gameModel.getGameObjects().get(i).isCollidable()) {
-				collidableGameObjects.add(gameObject);
-			}
-		}
-		return collidableGameObjects;
-	}
-
+	
 }

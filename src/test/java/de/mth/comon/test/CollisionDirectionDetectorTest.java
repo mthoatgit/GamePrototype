@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import de.mth.game.collision.*;
+import de.mth.game.collision.CollisionDirectionDetector.Direction;
 import de.mth.game.gameobject.*;
 
 public class CollisionDirectionDetectorTest {
@@ -16,7 +17,7 @@ public class CollisionDirectionDetectorTest {
 
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
-		int direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// Player is left Other is Right -> Collision Player on Right Side
 		assertEquals(0, direction);
 
@@ -29,7 +30,7 @@ public class CollisionDirectionDetectorTest {
 
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
-		int direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// Player is right Other is left -> Collision Player on left Side
 		assertEquals(1, direction);
 	}
@@ -41,7 +42,7 @@ public class CollisionDirectionDetectorTest {
 
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
-		int direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// // Player is bottom Other is top -> Collision Player on top Side
 		assertEquals(2, direction);
 	}
@@ -53,7 +54,7 @@ public class CollisionDirectionDetectorTest {
 
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
-		int direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// Player is top Other is bottom -> Collision Player on bottom Side
 		assertEquals(3, direction);
 	}

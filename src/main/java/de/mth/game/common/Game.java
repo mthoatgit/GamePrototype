@@ -21,6 +21,8 @@ public class Game extends AbstractGame {
 
 	private GameModel gm;
 
+	private CollisionResolver collisionResolver; 
+	
 	private GarbageCollector garbageCollector;
 
 	private Stage stage = Stage.GAME;
@@ -32,6 +34,8 @@ public class Game extends AbstractGame {
 	protected void init() {
 		gm = new GameModel();
 
+		collisionResolver = new CollisionResolver(gm);
+		
 		garbageCollector = new GarbageCollector();
 
 		this.addKeyListener(gm.getInput());
@@ -67,20 +71,13 @@ public class Game extends AbstractGame {
 
 			ArrayList<GameObject> gameObjects = gm.getGameObjects();
 
-			// //TODO: Trennung von Konfiguration, Collision und Update
-			// for (int i = 0; i < gameObjects.size(); i++) {
-			// GameObject tempObject = gameObjects.get(i);
-			// tempObject.setV;
-			//
-			// }
-
-			CollisionResolver collisionResolver = new CollisionResolver(gm);
-			collisionResolver.checkCollision(collisionResolver.getAllCollidableGameObjects());
+			ArrayList<GameObject> allCollidableGameObjects = gm.getAllCollidableGameObjects();
+			Map<GameObject, ArrayList<GameObject>> objectsToResolveMap = collisionResolver.getCollidedObjects(allCollidableGameObjects);
+			collisionResolver.resolveCollisions(objectsToResolveMap);
 
 			for (int i = 0; i < gameObjects.size(); i++) {
 				GameObject tempObject = gameObjects.get(i);
 				tempObject.update();
-
 			}
 			break;
 		case MENU:
