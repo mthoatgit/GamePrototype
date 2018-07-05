@@ -35,17 +35,20 @@ public class CollisionDirectionDetector {
 		Double inf = Double.MAX_VALUE;
 		Double[] array = new Double[] { inf, inf, inf, inf };
 
-		if (check.getRight() > other.getLeft() && check.getLeft() < other.getLeft()) {
-			// Player is left Other is Right -> Collision Player on Right Side
-			double leftCollision = Math.abs(check.getRight() - other.getLeft());
-			array[0] = leftCollision;
-		}
-
 		if (check.getLeft() < other.getRight() && check.getRight() > other.getRight()) {
 			// Player is right Other is left -> Collision Player on left Side
-			double rightCollision = Math.abs(check.getLeft() - other.getRight());
+			double leftCollision = Math.abs(check.getLeft() - other.getRight());
+			array[0] = leftCollision;
+		}
+		
+		if (check.getRight() > other.getLeft() && check.getLeft() < other.getLeft()) {
+			// Player is left Other is Right -> Collision Player on Right Side
+			double rightCollision = Math.abs(check.getRight() - other.getLeft());
 			array[1] = rightCollision;
 		}
+		
+		
+		
 		if (check.getTop() < other.getBottom() && check.getBottom() > other.getBottom()) {
 			// // Player is bottom Other is top -> Collision Player on top Side
 			double bottomCollision = other.getBottom() - check.getTop();

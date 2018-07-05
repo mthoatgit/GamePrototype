@@ -11,19 +11,6 @@ import de.mth.game.gameobject.*;
 public class CollisionDirectionDetectorTest {
 
 	@Test
-	public void getRightCollisionTest() {
-		GameObject player = new Player(0, 30);
-		GameObject mountain = new Mountain(30, 30);
-
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
-
-		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
-		// Player is left Other is Right -> Collision Player on Right Side
-		assertEquals(0, direction);
-
-	}
-
-	@Test
 	public void getLeftCollisionTest() {
 		GameObject player = new Player(30, 30);
 		GameObject mountain = new Mountain(0, 30);
@@ -32,8 +19,23 @@ public class CollisionDirectionDetectorTest {
 
 		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// Player is right Other is left -> Collision Player on left Side
-		assertEquals(1, direction);
+		assertEquals(Direction.LEFT, direction);
 	}
+
+	
+	@Test
+	public void getRightCollisionTest() {
+		GameObject player = new Player(0, 30);
+		GameObject mountain = new Mountain(30, 30);
+
+		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
+
+		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
+		// Player is left Other is Right -> Collision Player on Right Side
+		assertEquals(Direction.RIGHT, direction);
+
+	}
+
 
 	@Test
 	public void getTopCollisionTest() {
@@ -44,7 +46,7 @@ public class CollisionDirectionDetectorTest {
 
 		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// // Player is bottom Other is top -> Collision Player on top Side
-		assertEquals(2, direction);
+		assertEquals(Direction.TOP, direction);
 	}
 
 	@Test
@@ -56,7 +58,7 @@ public class CollisionDirectionDetectorTest {
 
 		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
 		// Player is top Other is bottom -> Collision Player on bottom Side
-		assertEquals(3, direction);
+		assertEquals(Direction.BOTTOM, direction);
 	}
 
 	// @Test
