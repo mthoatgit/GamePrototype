@@ -99,11 +99,11 @@ public class Player extends GameObject {
 	@Override
 	public void update() {
 
-		if (!isCollidingAtNextStep()) {
-
-			setVelocity(getVelocity());
-		}
-		setCollidingAtNextStep(false);
+//		if (!isCollidingAtNextStep()) {
+//
+//			setVelocity(getVelocity());
+//		}
+//		setCollidingAtNextStep(false);
 
 		if (isAtDestination()) {
 			setVelX(0);
@@ -126,7 +126,7 @@ public class Player extends GameObject {
 		boolean top = true;
 		boolean bottom = true;
 
-		setCollidingAtNextStep(true);
+//		setCollidingAtNextStep(true);
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
 
 		for (GameObject gameObject : gameObjects) {
@@ -137,27 +137,33 @@ public class Player extends GameObject {
 		        case LEFT: 
 		        	if (getVelX() < 0) {
 						setVelX(0);
+						left = false;
 					}
 		        	break;
 		        case RIGHT:
 		        	if (getVelX() > 0) {
 
 						setVelX(0);
+						right = false;
 					}
 		        	break;
 		        case TOP: 
 		        	if (getVelY() < 0) {
 						setVelY(0);
+						top = false;
 					}
 		        	break;
 		        case BOTTOM:
 		        	if (getVelY() > 0) {
 						setVelY(0);
+						bottom = false;
 					}
 		        	break;
 		        default: 
 		        	System.out.println("CollisionDirectionDetector.getDirection()");
 		        } 
+			 
+//			 if(direction)
 			
 			
 			
@@ -248,12 +254,6 @@ public class Player extends GameObject {
 
 	public Movement getMovement() {
 		return movement;
-	}
-
-	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isAimModus() {

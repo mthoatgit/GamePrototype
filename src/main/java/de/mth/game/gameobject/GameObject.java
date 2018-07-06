@@ -18,9 +18,6 @@ public abstract class GameObject {
 
 	private double speed;
 
-	public Path path;
-	public int pathCounter;
-
 	protected float velX, velY;
 
 	protected float destinationX, destinationY;
@@ -41,11 +38,9 @@ public abstract class GameObject {
 	public GameObject(int x, int y) {
 		setPosition(x, y);
 		setDestination(x, y);
-		this.path = null;
 		this.speed = 1;
 		this.velX = 0;
 		this.velY = 0;
-		this.pathCounter = 0;
 
 		setCollidable(false);
 		setGarbage(false);
@@ -83,7 +78,7 @@ public abstract class GameObject {
 		g.drawRect(b.x, b.y, b.width, b.height);
 	}
 
-	public float[] getVelocity(float destX, float destY) {
+	public float[] calculateVelocity(float destX, float destY) {
 		float dx = destX - ((float) getX());
 		float dy = destY - ((float) getY());
 
@@ -122,9 +117,16 @@ public abstract class GameObject {
 
 
 	public float[] getVelocity() {
-		return getVelocity(getDestinationX(), getDestinationY());
+		return calculateVelocity(getDestinationX(), getDestinationY());
 	}
 
+	public void setVelocity() {
+		float[] velocity = calculateVelocity(getDestinationX(), getDestinationY());
+		setVelX(velocity[0]);
+		setVelY(velocity[1]);
+
+	}
+	
 	public void setVelocity(float[] velocity) {
 		setVelX(velocity[0]);
 		setVelY(velocity[1]);
@@ -214,15 +216,6 @@ public abstract class GameObject {
 		setDestinationY(y);
 	}
 
-	public Path getPath() {
-		return path;
-	}
-
-	public void setPath(Path path) {
-		this.path = path;
-		setDestination(path.getX(pathCounter), path.getY(pathCounter));
-	}
-
 	public double getSpeed() {
 		return speed;
 	}
@@ -295,7 +288,7 @@ public abstract class GameObject {
 	}
 	
 	public boolean isCollidingAtNextStepWith(GameObject otherObject) {
-		return this.getNextStep().intersects(otherObject.getNextStep());
+		return this.getNextStep().intersects(otherObject.getBounds());
 	}
 
 	public abstract void defineTextures(TextureLoader textureLoader);
@@ -307,7 +300,5 @@ public abstract class GameObject {
 	public abstract void destroy();
 
 	public abstract void resolveCollision(ArrayList<GameObject> gameObject);
-
-	public abstract void setPerceptionRange(int perceptionRange);
 
 }

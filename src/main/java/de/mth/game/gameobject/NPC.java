@@ -89,12 +89,6 @@ public class NPC extends GameObject {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
 		if (gameObjects.size() != 0) {

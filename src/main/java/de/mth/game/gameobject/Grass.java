@@ -41,12 +41,6 @@ public class Grass extends GameObject {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
 		

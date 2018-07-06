@@ -11,7 +11,7 @@ public class Bullet extends GameObject {
 		super(x, y);
 		setSpeed(3);
 
-		float[] vel = getVelocity(destX, destY);
+		float[] vel = calculateVelocity(destX, destY);
 
 		setVelX(vel[0]);
 		setVelY(vel[1]);
@@ -44,12 +44,6 @@ public class Bullet extends GameObject {
 	@Override
 	public boolean isCollidable() {
 		return true;
-	}
-
-	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

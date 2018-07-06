@@ -71,6 +71,10 @@ public class Game extends AbstractGame {
 
 			ArrayList<GameObject> gameObjects = gm.getGameObjects();
 
+			for(GameObject gameObject : gameObjects) {
+				gameObject.setVelocity();
+			}
+			
 			ArrayList<GameObject> allCollidableGameObjects = gm.getAllCollidableGameObjects();
 			Map<GameObject, ArrayList<GameObject>> objectsToResolveMap = collisionResolver.getCollidedObjects(allCollidableGameObjects);
 			collisionResolver.resolveCollisions(objectsToResolveMap);
@@ -191,9 +195,9 @@ public class Game extends AbstractGame {
 						g.setColor(Color.BLACK);
 						g.drawRect((int) h.getX(), (int) h.getY(), (int) h.getWidth(), (int) h.getHeight());
 
-						g.setColor(Color.RED);
 						Rectangle nextStep = tempObject.getNextStep();
-						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
+//						g.setColor(Color.RED);
+//						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
 
 					}
 				}

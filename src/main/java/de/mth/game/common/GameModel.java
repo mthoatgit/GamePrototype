@@ -181,9 +181,9 @@ public class GameModel {
 					createNPC(xx * 32, yy * 32);
 
 				}
-				if (red == 255 && green == 255 & blue == 0) { // Grün
-					createNPC(xx * 32, yy * 32);
-				}
+//				if (red == 255 && green == 255 & blue == 0) { // Grün
+//					createNPC(xx * 32, yy * 32);
+//				}
 				if (red == 255 && green == 0 & blue == 0) { // Rot
 					// createPlayer(xx * 32, yy * 32);
 					Player p = new Player(xx * 32, yy * 32);
