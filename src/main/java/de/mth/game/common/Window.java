@@ -5,6 +5,8 @@ import java.io.*;
 
 import javax.swing.*;
 
+import de.mth.game.menu.GameButton;
+
 public class Window {
 
 	public static int WIDTH = 1024;
@@ -17,8 +19,15 @@ public class Window {
 		game.setMinimumSize(new Dimension(w, h));
 
 		JFrame frame = new JFrame(title);
+		Button button = new GameButton();
+		button.setBounds(50, 50, 50, 50);
+		button.setLabel("TEXT");
+		frame.add(button);
+		
 		// frame.setUndecorated(true);
 		frame.add(game);
+
+		
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

@@ -1,15 +1,20 @@
 package de.mth.game.gameobject;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.ArrayList;
 
 import de.mth.game.collision.CollisionDirectionDetector;
-import de.mth.game.collision.CollisionDirectionDetector.Direction;
-import de.mth.game.common.*;
-import de.mth.game.texture.*;
+import de.mth.game.common.Camera;
+import de.mth.game.common.Converter;
+import de.mth.game.common.Game;
+import de.mth.game.common.GameModel;
+import de.mth.game.common.Input;
+import de.mth.game.texture.Animation;
+import de.mth.game.texture.TextureLoader;
 
-public class Player extends GameObject {
+public class Player extends MoveableGameObject {
 
 	private Animation walkUp;
 	private Animation walkDown;
@@ -122,137 +127,27 @@ public class Player extends GameObject {
 
 	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
-		boolean left = false;
-		boolean right = false;
-		boolean top = false;
-		boolean bottom = false;
-
-		// setCollidingAtNextStep(true);
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
+		setCollidingLeft(false);
+		setCollidingRight(false);
+		setCollidingTop(false);
+		setCollidingBottom(false);
 
 		Rectangle2D nextStep = getNextStep();
 
-		if (gameObjects.size() > 2) {
-			System.out.println("more than 2");
-		}
+		// if (gameObjects.size() > 2) {
+		// System.out.println("more than 2");
+		// }
 
-		for (GameObject gameObject : gameObjects) {
-
-			Direction direction = collisionDirectionDetector.getDirection(nextStep, gameObject);
-			// System.out.println("Player.resolveCollision()");
-			switch (direction) {
-			case LEFT:
-				left = true;
-				// if (getVelX() < 0) {
-				// setVelX(0);
-				// }
-				break;
-			case RIGHT:
-				right = true;
-				// if (getVelX() > 0) {
-				// setVelX(0);
-				// }
-				break;
-			case TOP:
-				// if(this.getBounds().intersects(gameObject.getBounds())) {
-				// System.out.println("Player.resolveCollision()");
-				// Rectangle mountain = gameObject.getBounds();
-				// Rectangle player = this.getBounds();
-				// player.get
-
-				// }
-				top = true;
-				GameObject gameObject2 = gameObject;
-				// if (getVelY() < 0) {
-				// setVelY(0);
-				// }
-				break;
-			case BOTTOM:
-				bottom = true;
-				// if (getVelY() > 0) {
-				// setVelY(0);
-				// }
-				break;
-			default:
-			}
-
-		}
+		getCollisionDirections(nextStep, gameObjects);
 
 		/*
 		 * Check ob der Player an einer Wand langläuft. (Wand = mehrere Objekte direkt
 		 * nebeneinander)
 		 */
-		if ((top || bottom) && (right || left)) {
-			if (getVelX() != 0 && getVelY() != 0) {
+		checkWallsAndCorners(gameObjects);
 
-				boolean isVerticalWall = false;
-				boolean isHorizontalWall = false;
-				boolean isWall = false;
-				for (GameObject x : gameObjects) {
-					for (GameObject y : gameObjects) {
-						if (!x.equals(y)) {
-							if (x.getY() == y.getY()) {
-								isHorizontalWall = true;
-							}
-							if (x.getX() == y.getX()) {
-								isVerticalWall = true;
-							}
-						}
-					}
-				}
+		correctVelocity();
 
-				if (isHorizontalWall && !(isHorizontalWall && isVerticalWall)) {
-					right = false;
-					left = false;
-					System.out.println("right = false");
-				} else if (isVerticalWall && !(isHorizontalWall && isVerticalWall)) {
-					top = false;
-					bottom = false;
-					System.out.println("top = false");
-				}
-
-			}
-
-		}
-
-		if (left) {
-			if (getVelX() < 0) {
-				setVelX(0);
-			}
-		}
-		if (right) {
-			if (getVelX() > 0) {
-				setVelX(0);
-			}
-		}
-		if (top) {
-			if (getVelY() < 0) {
-				setVelY(0);
-			}
-		}
-		if (bottom) {
-			if (getVelY() > 0)
-				setVelY(0);
-		}
-
-		if (top || bottom && right || left)
-
-		{
-			// System.out.println("Player.resolveCollision()");
-		}
-
-	}
-
-	public double recalculateVelocity(GameObject gameObject) {
-		/*
-		 * NextStep wird kollidieren Ziel: Velocity nicht direkt auf Null setzen sondern
-		 * abhängig von der Entfernung
-		 */
-
-		double y2 = gameObject.getY();
-		double result = getY() - y2 - 1.0;
-
-		return result;
 	}
 
 	@Override

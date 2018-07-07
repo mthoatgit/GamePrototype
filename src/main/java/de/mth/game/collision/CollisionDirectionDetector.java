@@ -7,31 +7,11 @@ import de.mth.game.gameobject.*;
 
 public class CollisionDirectionDetector {
 
-	// public double getLeftCollision(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// return checkGameObject.getLeft() - otherGameObject.getRight();
-	// }
-	//
-	// public double getRightCollision(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// return checkGameObject.getRight() - otherGameObject.getLeft();
-	// }
-	//
-	// public double getTopCollision(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// return checkGameObject.getTop() - otherGameObject.getBottom();
-	// }
-	//
-	// public double getBottomCollision(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// return checkGameObject.getBottom() - otherGameObject.getTop();
-	// }
-
 	public enum Direction {
 		LEFT, RIGHT, TOP, BOTTOM
 	}
 	
-	public Direction getDirection(Rectangle2D nextStep, GameObject other) {
+	public static Direction getDirection(Rectangle2D nextStep, Rectangle2D other) {
 
 		Double inf = Double.MAX_VALUE;
 		Double[] array = new Double[] { inf, inf, inf, inf };
@@ -41,59 +21,34 @@ public class CollisionDirectionDetector {
 		double top = nextStep.getY();
 		double bottom = nextStep.getY() + nextStep.getHeight();
 		
+		double otherLeft = other.getX();
+		double otherRight = other.getX() + nextStep.getWidth();
+		double otherTop = other.getY();
+		double otherBottom = other.getY() + nextStep.getHeight();
 		
-		if (left < other.getRight() && right > other.getRight()) {
+		if (left < otherRight && right > otherRight) {
 			// Player is right Other is left -> Collision Player on left Side
-			double leftCollision = Math.abs(left - other.getRight());
+			double leftCollision = Math.abs(left - otherRight);
 			array[0] = leftCollision;
 		}
 		
-		if (right > other.getLeft() && left < other.getLeft()) {
+		if (right > otherLeft && left < otherLeft) {
 			// Player is left Other is Right -> Collision Player on Right Side
-			double rightCollision = Math.abs(right - other.getLeft());
+			double rightCollision = Math.abs(right - otherLeft);
 			array[1] = rightCollision;
 		}
 		
-		
-		
-		if (top < other.getBottom() && bottom > other.getBottom()) {
+		if (top < otherBottom && bottom > otherBottom) {
 			// // Player is bottom Other is top -> Collision Player on top Side
-			double bottomCollision = other.getBottom() - top;
+			double bottomCollision = otherBottom - top;
 			array[2] = bottomCollision;
 		}
 
-		if (bottom > other.getTop() && top < other.getTop()) {
+		if (bottom > otherTop && top < otherTop) {
 			// Player is top Other is bottom -> Collision Player on bottom Side
-			double topCollision = bottom - other.getTop();
+			double topCollision = bottom - otherTop;
 			array[3] = topCollision;
 		}
-		
-
-//		if (check.getLeft() < other.getRight() && check.getRight() > other.getRight()) {
-//			// Player is right Other is left -> Collision Player on left Side
-//			double leftCollision = Math.abs(check.getLeft() - other.getRight());
-//			array[0] = leftCollision;
-//		}
-//		
-//		if (check.getRight() > other.getLeft() && check.getLeft() < other.getLeft()) {
-//			// Player is left Other is Right -> Collision Player on Right Side
-//			double rightCollision = Math.abs(check.getRight() - other.getLeft());
-//			array[1] = rightCollision;
-//		}
-//		
-//		
-//		
-//		if (check.getTop() < other.getBottom() && check.getBottom() > other.getBottom()) {
-//			// // Player is bottom Other is top -> Collision Player on top Side
-//			double bottomCollision = other.getBottom() - check.getTop();
-//			array[2] = bottomCollision;
-//		}
-//
-//		if (check.getBottom() > other.getTop() && check.getTop() < other.getTop()) {
-//			// Player is top Other is bottom -> Collision Player on bottom Side
-//			double topCollision = check.getBottom() - other.getTop();
-//			array[3] = topCollision;
-//		}
 
 		List<Double> asList = Arrays.asList(array);
 		int indexOf = asList.indexOf(Collections.min(asList));
@@ -112,78 +67,12 @@ public class CollisionDirectionDetector {
 	        } 
 		 return null;
 	}
-
-//	public boolean isCollidingRight(GameObject checkGameObject, GameObject otherGameObject) {
-//		int direction = getDirection(checkGameObject, otherGameObject);
-//		if(direction == 0) {
-//			return true;
-//		}
-//		return false;
-//	}
-//
-//	public boolean isCollidingLeft(GameObject checkGameObject, GameObject otherGameObject) {
-//		int direction = getDirection(checkGameObject, otherGameObject);
-//		if(direction == 1) {
-//			return true;
-//		}
-//		return false;
-//	}
-//
-//	public boolean isCollidingTop(GameObject checkGameObject, GameObject otherGameObject) {
-//		int direction = getDirection(checkGameObject, otherGameObject);
-//		if(direction == 2) {
-//			return true;
-//		}
-//		return false;
-//	}
-//	
-//	public boolean isCollidingBottom(GameObject checkGameObject, GameObject otherGameObject) {
-//		int direction = getDirection(checkGameObject, otherGameObject);
-//		if(direction == 3) {
-//			return true;
-//		}
-//		return false;
-//	}
-
 	
-
-	// public boolean isCollidingBottom(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// double t = getTopCollision(checkGameObject, otherGameObject);
-	// double b = getBottomCollision(checkGameObject, otherGameObject);
-	// double l = getLeftCollision(checkGameObject, otherGameObject);
-	// double r = getRightCollision(checkGameObject, otherGameObject);
-	//
-	// return t < b && t < l && t < r;
-	// }
-	//
-	// public boolean isCollidingTop(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// double t = getTopCollision(checkGameObject, otherGameObject);
-	// double b = getBottomCollision(checkGameObject, otherGameObject);
-	// double l = getLeftCollision(checkGameObject, otherGameObject);
-	// double r = getRightCollision(checkGameObject, otherGameObject);
-	//
-	// return b < t && b < l && b < r;
-	// }
-	//
-	// public boolean isCollidingRight(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// double t = getTopCollision(checkGameObject, otherGameObject);
-	// double b = getBottomCollision(checkGameObject, otherGameObject);
-	// double l = getLeftCollision(checkGameObject, otherGameObject);
-	// double r = getRightCollision(checkGameObject, otherGameObject);
-	//
-	// return r < l && r < t && r < b;
-	// }
-	//
-	// public boolean isCollidingLeft(GameObject checkGameObject, GameObject
-	// otherGameObject) {
-	// double t = getTopCollision(checkGameObject, otherGameObject);
-	// double b = getBottomCollision(checkGameObject, otherGameObject);
-	// double l = getLeftCollision(checkGameObject, otherGameObject);
-	// double r = getRightCollision(checkGameObject, otherGameObject);
-	//
-	// return l < r && l < t && l < b;
-	// }
+	public static Map<GameObject, Direction> getDirections(Rectangle2D nextStep, ArrayList<GameObject> gameObjectList){
+		Map<GameObject, Direction> map = new HashMap<>();
+		for(GameObject other : gameObjectList) {
+			map.put(other, getDirection(nextStep, other.getBounds()));
+		}
+		return map;
+	}
 }

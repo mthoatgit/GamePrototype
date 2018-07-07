@@ -15,9 +15,7 @@ public class CollisionDirectionDetectorTest {
 		GameObject player = new Player(30, 30);
 		GameObject mountain = new Mountain(0, 30);
 
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
-
-		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = CollisionDirectionDetector.getDirection(player.getBounds(), mountain.getBounds());
 		// Player is right Other is left -> Collision Player on left Side
 		assertEquals(Direction.LEFT, direction);
 	}
@@ -28,9 +26,7 @@ public class CollisionDirectionDetectorTest {
 		GameObject player = new Player(0, 30);
 		GameObject mountain = new Mountain(30, 30);
 
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
-
-		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = CollisionDirectionDetector.getDirection(player.getBounds(), mountain.getBounds());
 		// Player is left Other is Right -> Collision Player on Right Side
 		assertEquals(Direction.RIGHT, direction);
 
@@ -42,9 +38,7 @@ public class CollisionDirectionDetectorTest {
 		GameObject player = new Player(30, 30);
 		GameObject mountain = new Mountain(30, 0);
 
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
-
-		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = CollisionDirectionDetector.getDirection(player.getBounds(), mountain.getBounds());
 		// // Player is bottom Other is top -> Collision Player on top Side
 		assertEquals(Direction.TOP, direction);
 	}
@@ -54,9 +48,7 @@ public class CollisionDirectionDetectorTest {
 		GameObject player = new Player(30, 0);
 		GameObject mountain = new Mountain(30, 30);
 
-		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
-
-		Direction direction = collisionDirectionDetector.getDirection(player, mountain);
+		Direction direction = CollisionDirectionDetector.getDirection(player.getBounds(), mountain.getBounds());
 		// Player is top Other is bottom -> Collision Player on bottom Side
 		assertEquals(Direction.BOTTOM, direction);
 	}

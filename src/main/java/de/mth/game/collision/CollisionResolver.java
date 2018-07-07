@@ -34,7 +34,7 @@ public class CollisionResolver {
 			GameObject checkObject = allObjects.get(i);
 
 			// Return all objects that could collide with the given object
-//			collidableObjectsList = quad.retrieve(collidableObjectsList, checkObject);
+			// collidableObjectsList = quad.retrieve(collidableObjectsList, checkObject);
 
 			// Return all real collisions
 			ArrayList<GameObject> collidedObjectsList = getCollidedObjectsList(checkObject, allObjects);
@@ -45,9 +45,9 @@ public class CollisionResolver {
 		}
 		return objectsToResolveMap;
 	}
-	
+
 	public void getCollidableObjects(ArrayList<GameObject> allObjects) {
-		
+
 	}
 
 	public void resolveCollisions(Map<GameObject, ArrayList<GameObject>> objectsToResolveMap) {
@@ -68,32 +68,26 @@ public class CollisionResolver {
 			// Mit sich selbst?
 			if (!checkObject.equals(collidableObject)) {
 
-			
-				
 				// Kollision beim nächsten Step?
-				if (checkObject instanceof Player) {
-					
-					
-					Rectangle2D actual = checkObject.getBounds();
-					Rectangle2D nextStep = checkObject.getNextStep();
-					Rectangle2D bounds = collidableObject.getBounds();
-					
-					if(actual.intersects(bounds)) {
-						System.out.println("actual intersects with bounds");
-					}
-					
-					if (nextStep.intersects(bounds)) {
-						if(actual.intersects(bounds)) {
-							System.out.println("actual collided");
-						}else if(nextStep.intersects(bounds) && actual.intersects(bounds)){
-							System.out.println("nextStep collided but actual not");
-						}
-						
-						GameObject collidedObject = collidableObjectsList.get(j);
-						collidedObjectsList.add(collidedObject);
-						
-						
-					}
+
+				Rectangle2D actual = checkObject.getBounds();
+				Rectangle2D nextStep = checkObject.getNextStep();
+				Rectangle2D bounds = collidableObject.getBounds();
+
+				if (actual.intersects(bounds)) {
+					System.out.println("actual intersects with bounds");
+				}
+
+				if (nextStep.intersects(bounds)) {
+//					if (actual.intersects(bounds)) {
+//						System.out.println("actual collided");
+//					} else if (nextStep.intersects(bounds) && actual.intersects(bounds)) {
+//						System.out.println("nextStep collided but actual not");
+//					}
+
+					GameObject collidedObject = collidableObjectsList.get(j);
+					collidedObjectsList.add(collidedObject);
+
 				}
 
 				// // Kollision beim nächsten Step?

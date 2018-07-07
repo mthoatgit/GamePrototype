@@ -1,12 +1,13 @@
 package de.mth.game.gameobject;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.util.*;
 
 import de.mth.game.texture.*;
 
-public class NPC extends GameObject {
+public class NPC extends MoveableGameObject {
 
 	private Animation playerWalk;
 
@@ -35,11 +36,11 @@ public class NPC extends GameObject {
 	@Override
 	public void update() {
 
-		if (!isCollidingAtNextStep()) {
-
-			setVelocity(getVelocity());
-		}
-		setCollidingAtNextStep(false);
+//		if (!isCollidingAtNextStep()) {
+//
+//			setVelocity(getVelocity());
+//		}
+//		setCollidingAtNextStep(false);
 
 		if (isAtDestination()) {
 			setVelX(0);
@@ -49,7 +50,7 @@ public class NPC extends GameObject {
 		y += getVelY();
 
 		if (isAtDestination()) {
-			// wander();
+			 wander();
 
 		}
 
@@ -59,7 +60,7 @@ public class NPC extends GameObject {
 	public void wander() {
 
 		Random random = new Random();
-		setDestination(random.nextInt(Window.WIDTH), random.nextInt(Window.HEIGHT));
+		setDestination(random.nextInt(de.mth.game.common.Window.WIDTH), random.nextInt(de.mth.game.common.Window.WIDTH));
 
 	}
 
@@ -91,20 +92,42 @@ public class NPC extends GameObject {
 	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
-		if (gameObjects.size() != 0) {
-			GameObject gameObject = gameObjects.get(0);
+		setCollidingLeft(false);
+		setCollidingRight(false);
+		setCollidingTop(false);
+		setCollidingBottom(false);
 
-			setCollidingAtNextStep(true);
-			if (gameObject instanceof Bullet) {
-				destroy();
-			}
+		Rectangle2D nextStep = getNextStep();
 
-			if (gameObject instanceof Player || gameObject instanceof Mountain) {
-				gameObject.setCollidingAtNextStep(true);
-				dodge(gameObject);
+		// if (gameObjects.size() > 2) {
+		// System.out.println("more than 2");
+		// }
 
-			}
-		}
+		getCollisionDirections(nextStep, gameObjects);
+
+		/*
+		 * Check ob der Player an einer Wand langläuft. (Wand = mehrere Objekte direkt
+		 * nebeneinander)
+		 */
+		checkWallsAndCorners(gameObjects);
+
+		correctVelocity();
+		
+		
+//		if (gameObjects.size() != 0) {
+//			GameObject gameObject = gameObjects.get(0);
+//
+//			setCollidingAtNextStep(true);
+//			if (gameObject instanceof Bullet) {
+//				destroy();
+//			}
+//
+//			if (gameObject instanceof Player || gameObject instanceof Mountain) {
+//				gameObject.setCollidingAtNextStep(true);
+//				dodge(gameObject);
+//
+//			}
+//		}
 	}
 
 	public void dodge(GameObject gameObject) {
