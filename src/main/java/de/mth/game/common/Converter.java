@@ -8,8 +8,8 @@ public class Converter {
 		this.gm = gm;
 	}
 
-	public float[] convertToGlobal(float valueX, float valueY) {
-		float[] converted = new float[2];
+	public double[] convertToGlobal(double valueX, double valueY) {
+		double[] converted = new double[2];
 		converted[0] = valueX - gm.getCamera().getX();
 		converted[1] = valueY - gm.getCamera().getY();
 

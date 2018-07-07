@@ -1,6 +1,7 @@
 package de.mth.game.gameobject;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 
 import de.mth.game.collision.CollisionDirectionDetector;
@@ -78,7 +79,7 @@ public class Player extends GameObject {
 		Camera cam = gm.getCamera();
 
 		Converter converter = new Converter(gm);
-		float[] dest = converter.convertToGlobal(input.getMouseX(), input.getMouseY());
+		double[] dest = converter.convertToGlobal(input.getMouseX(), input.getMouseY());
 
 		gm.getGameObjects().add(new Bullet((int) getX(), (int) getY(), dest[0], dest[1]));
 	}
@@ -99,11 +100,11 @@ public class Player extends GameObject {
 	@Override
 	public void update() {
 
-//		if (!isCollidingAtNextStep()) {
-//
-//			setVelocity(getVelocity());
-//		}
-//		setCollidingAtNextStep(false);
+		// if (!isCollidingAtNextStep()) {
+		//
+		// setVelocity(getVelocity());
+		// }
+		// setCollidingAtNextStep(false);
 
 		if (isAtDestination()) {
 			setVelX(0);
@@ -121,55 +122,137 @@ public class Player extends GameObject {
 
 	@Override
 	public void resolveCollision(ArrayList<GameObject> gameObjects) {
-		boolean left = true;
-		boolean right = true;
-		boolean top = true;
-		boolean bottom = true;
+		boolean left = false;
+		boolean right = false;
+		boolean top = false;
+		boolean bottom = false;
 
-//		setCollidingAtNextStep(true);
+		// setCollidingAtNextStep(true);
 		CollisionDirectionDetector collisionDirectionDetector = new CollisionDirectionDetector();
+
+		Rectangle2D nextStep = getNextStep();
+
+		if (gameObjects.size() > 2) {
+			System.out.println("more than 2");
+		}
 
 		for (GameObject gameObject : gameObjects) {
 
-			Direction direction = collisionDirectionDetector.getDirection(this, gameObject);
-			
-			 switch(direction){ 
-		        case LEFT: 
-		        	if (getVelX() < 0) {
-						setVelX(0);
-						left = false;
-					}
-		        	break;
-		        case RIGHT:
-		        	if (getVelX() > 0) {
+			Direction direction = collisionDirectionDetector.getDirection(nextStep, gameObject);
+			// System.out.println("Player.resolveCollision()");
+			switch (direction) {
+			case LEFT:
+				left = true;
+				// if (getVelX() < 0) {
+				// setVelX(0);
+				// }
+				break;
+			case RIGHT:
+				right = true;
+				// if (getVelX() > 0) {
+				// setVelX(0);
+				// }
+				break;
+			case TOP:
+				// if(this.getBounds().intersects(gameObject.getBounds())) {
+				// System.out.println("Player.resolveCollision()");
+				// Rectangle mountain = gameObject.getBounds();
+				// Rectangle player = this.getBounds();
+				// player.get
 
-						setVelX(0);
-						right = false;
-					}
-		        	break;
-		        case TOP: 
-		        	if (getVelY() < 0) {
-						setVelY(0);
-						top = false;
-					}
-		        	break;
-		        case BOTTOM:
-		        	if (getVelY() > 0) {
-						setVelY(0);
-						bottom = false;
-					}
-		        	break;
-		        default: 
-		        	System.out.println("CollisionDirectionDetector.getDirection()");
-		        } 
-			 
-//			 if(direction)
-			
-			
-			
+				// }
+				top = true;
+				GameObject gameObject2 = gameObject;
+				// if (getVelY() < 0) {
+				// setVelY(0);
+				// }
+				break;
+			case BOTTOM:
+				bottom = true;
+				// if (getVelY() > 0) {
+				// setVelY(0);
+				// }
+				break;
+			default:
+			}
+
 		}
 
+		/*
+		 * Check ob der Player an einer Wand langläuft. (Wand = mehrere Objekte direkt
+		 * nebeneinander)
+		 */
+		if ((top || bottom) && (right || left)) {
+			if (getVelX() != 0 && getVelY() != 0) {
 
+				boolean isVerticalWall = false;
+				boolean isHorizontalWall = false;
+				boolean isWall = false;
+				for (GameObject x : gameObjects) {
+					for (GameObject y : gameObjects) {
+						if (!x.equals(y)) {
+							if (x.getY() == y.getY()) {
+								isHorizontalWall = true;
+							}
+							if (x.getX() == y.getX()) {
+								isVerticalWall = true;
+							}
+						}
+					}
+				}
+
+				if (isHorizontalWall && !(isHorizontalWall && isVerticalWall)) {
+					right = false;
+					left = false;
+					System.out.println("right = false");
+				} else if (isVerticalWall && !(isHorizontalWall && isVerticalWall)) {
+					top = false;
+					bottom = false;
+					System.out.println("top = false");
+				}
+
+			}
+
+		}
+
+		if (left) {
+			if (getVelX() < 0) {
+				setVelX(0);
+			}
+		}
+		if (right) {
+			if (getVelX() > 0) {
+				setVelX(0);
+			}
+		}
+		if (top) {
+			if (getVelY() < 0) {
+				setVelY(0);
+			}
+		}
+		if (bottom) {
+			if (getVelY() > 0)
+				setVelY(0);
+		}
+
+		if (top || bottom && right || left)
+
+		{
+			// System.out.println("Player.resolveCollision()");
+		}
+
+	}
+
+	public double recalculateVelocity(GameObject gameObject) {
+		/*
+		 * NextStep wird kollidieren Ziel: Velocity nicht direkt auf Null setzen sondern
+		 * abhängig von der Entfernung
+		 */
+
+		double y2 = gameObject.getY();
+		double result = getY() - y2 - 1.0;
+
+		return result;
 	}
 
 	@Override

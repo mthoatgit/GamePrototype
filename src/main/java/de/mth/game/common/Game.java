@@ -1,6 +1,7 @@
 package de.mth.game.common;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.util.*;
 
@@ -171,7 +172,7 @@ public class Game extends AbstractGame {
 					}
 					if (Game.DEBUG) {
 						if (t.isCollidable()) {
-							Rectangle h = t.getBounds();
+							Rectangle2D h = t.getBounds();
 							g.setColor(Color.BLACK);
 							g.drawRect((int) h.getX(), (int) h.getY(), (int) h.getWidth(), (int) h.getHeight());
 						}
@@ -191,11 +192,11 @@ public class Game extends AbstractGame {
 
 				if (Game.DEBUG) {
 					if (tempObject.isCollidable()) {
-						Rectangle h = tempObject.getBounds();
+						Rectangle2D h = tempObject.getBounds();
 						g.setColor(Color.BLACK);
 						g.drawRect((int) h.getX(), (int) h.getY(), (int) h.getWidth(), (int) h.getHeight());
 
-						Rectangle nextStep = tempObject.getNextStep();
+						Rectangle2D nextStep = tempObject.getNextStep();
 //						g.setColor(Color.RED);
 //						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
 

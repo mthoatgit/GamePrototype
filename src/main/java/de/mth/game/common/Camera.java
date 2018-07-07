@@ -5,7 +5,8 @@ import java.awt.*;
 import de.mth.game.gameobject.*;
 
 public class Camera {
-	private float x, y = 0;
+	
+	private double x, y = 0;
 
 	public Camera() {
 	}
@@ -16,19 +17,20 @@ public class Camera {
 		// System.out.println(x +" " + y);
 	}
 
-	public float getX() {
+	
+	public double getX() {
 		return x;
 	}
 
-	public void setX(float x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(float y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 

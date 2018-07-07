@@ -62,14 +62,14 @@ public class GameModel {
 		return gameObjects;
 	}
 
-	public ArrayList<Rectangle> getBounds() {
-		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
-		for (int i = 0; i < getGameObjects().size(); i++) {
-			bounds.add(getGameObjects().get(i).getBounds());
-
-		}
-		return bounds;
-	}
+//	public ArrayList<Rectangle> getBounds() {
+//		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
+//		for (int i = 0; i < getGameObjects().size(); i++) {
+//			bounds.add(getGameObjects().get(i).getBounds());
+//
+//		}
+//		return bounds;
+//	}
 
 	private void loadGame() {
 		BufferedImageLoader loader = new BufferedImageLoader();

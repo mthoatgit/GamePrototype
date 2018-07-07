@@ -1,5 +1,6 @@
 package de.mth.game.collision;
 
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 
 import de.mth.game.gameobject.*;
@@ -30,36 +31,69 @@ public class CollisionDirectionDetector {
 		LEFT, RIGHT, TOP, BOTTOM
 	}
 	
-	public Direction getDirection(GameObject check, GameObject other) {
+	public Direction getDirection(Rectangle2D nextStep, GameObject other) {
 
 		Double inf = Double.MAX_VALUE;
 		Double[] array = new Double[] { inf, inf, inf, inf };
-
-		if (check.getLeft() < other.getRight() && check.getRight() > other.getRight()) {
+		
+		double left = nextStep.getX();
+		double right = nextStep.getX() + nextStep.getWidth();
+		double top = nextStep.getY();
+		double bottom = nextStep.getY() + nextStep.getHeight();
+		
+		
+		if (left < other.getRight() && right > other.getRight()) {
 			// Player is right Other is left -> Collision Player on left Side
-			double leftCollision = Math.abs(check.getLeft() - other.getRight());
+			double leftCollision = Math.abs(left - other.getRight());
 			array[0] = leftCollision;
 		}
 		
-		if (check.getRight() > other.getLeft() && check.getLeft() < other.getLeft()) {
+		if (right > other.getLeft() && left < other.getLeft()) {
 			// Player is left Other is Right -> Collision Player on Right Side
-			double rightCollision = Math.abs(check.getRight() - other.getLeft());
+			double rightCollision = Math.abs(right - other.getLeft());
 			array[1] = rightCollision;
 		}
 		
 		
 		
-		if (check.getTop() < other.getBottom() && check.getBottom() > other.getBottom()) {
+		if (top < other.getBottom() && bottom > other.getBottom()) {
 			// // Player is bottom Other is top -> Collision Player on top Side
-			double bottomCollision = other.getBottom() - check.getTop();
+			double bottomCollision = other.getBottom() - top;
 			array[2] = bottomCollision;
 		}
 
-		if (check.getBottom() > other.getTop() && check.getTop() < other.getTop()) {
+		if (bottom > other.getTop() && top < other.getTop()) {
 			// Player is top Other is bottom -> Collision Player on bottom Side
-			double topCollision = check.getBottom() - other.getTop();
+			double topCollision = bottom - other.getTop();
 			array[3] = topCollision;
 		}
+		
+
+//		if (check.getLeft() < other.getRight() && check.getRight() > other.getRight()) {
+//			// Player is right Other is left -> Collision Player on left Side
+//			double leftCollision = Math.abs(check.getLeft() - other.getRight());
+//			array[0] = leftCollision;
+//		}
+//		
+//		if (check.getRight() > other.getLeft() && check.getLeft() < other.getLeft()) {
+//			// Player is left Other is Right -> Collision Player on Right Side
+//			double rightCollision = Math.abs(check.getRight() - other.getLeft());
+//			array[1] = rightCollision;
+//		}
+//		
+//		
+//		
+//		if (check.getTop() < other.getBottom() && check.getBottom() > other.getBottom()) {
+//			// // Player is bottom Other is top -> Collision Player on top Side
+//			double bottomCollision = other.getBottom() - check.getTop();
+//			array[2] = bottomCollision;
+//		}
+//
+//		if (check.getBottom() > other.getTop() && check.getTop() < other.getTop()) {
+//			// Player is top Other is bottom -> Collision Player on bottom Side
+//			double topCollision = check.getBottom() - other.getTop();
+//			array[3] = topCollision;
+//		}
 
 		List<Double> asList = Arrays.asList(array);
 		int indexOf = asList.indexOf(Collections.min(asList));

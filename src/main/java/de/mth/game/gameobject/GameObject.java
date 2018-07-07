@@ -1,6 +1,7 @@
 package de.mth.game.gameobject;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 
 import de.mth.game.pathfinding.*;
@@ -8,19 +9,19 @@ import de.mth.game.texture.*;
 
 public abstract class GameObject {
 
-	protected float x, y;
+	protected double x, y;
 
 	private boolean garbage = false;
 
 	private Texture texture;
 
-	protected float width, height;
+	protected double width, height;
 
 	private double speed;
 
-	protected float velX, velY;
+	protected double velX, velY;
 
-	protected float destinationX, destinationY;
+	protected double destinationX, destinationY;
 
 	protected boolean colliding = false;
 	protected boolean collidingAtNextStep = false;
@@ -59,31 +60,22 @@ public abstract class GameObject {
 		this.y = y;
 	}
 
-	public Rectangle getBounds() {
-		return new Rectangle((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
-	}
-
-	public boolean equals(Rectangle rect) {
-
-		if (getBounds().getX() == rect.getX() && getBounds().getY() == rect.getY()) {
-			return true;
-
-		}
-		return false;
+	public Rectangle2D getBounds() {
+		return new Rectangle2D.Double( getX(),  getY(),  getWidth(),  getHeight());
 	}
 
 	public void drawBounds(Graphics g) {
-		Rectangle b = getBounds();
+		Rectangle2D b = getBounds();
 		g.setColor(Color.BLUE);
-		g.drawRect(b.x, b.y, b.width, b.height);
+		g.drawRect((int)b.getX(), (int)b.getY(), (int)b.getWidth(), (int)b.getHeight());
 	}
 
-	public float[] calculateVelocity(float destX, float destY) {
-		float dx = destX - ((float) getX());
-		float dy = destY - ((float) getY());
+	public double[] calculateVelocity(double destX, double destY) {
+		double dx = destX - ((double) getX());
+		double dy = destY - ((double) getY());
 
 		// Satz des Pythagoras
-		float length = (float) Math.sqrt(dx * dx + dy * dy);
+		double length = (double) Math.sqrt(dx * dx + dy * dy);
 
 		// Aufteilung auf x- und y-Achse
 		dx /= length;
@@ -93,49 +85,47 @@ public abstract class GameObject {
 		dx *= speed;
 		dy *= speed;
 
-		float[] vel = new float[2];
+		double[] vel = new double[2];
 		vel[0] = dx;
 		vel[1] = dy;
 		return vel;
 	}
 
-	public float getTop() {
+	public double getTop() {
 		return getY();
 	}
 
-	public float getBottom() {
+	public double getBottom() {
 		return getY() + getHeight();
 	}
 
-	public float getLeft() {
+	public double getLeft() {
 		return getX();
 	}
 
-	public float getRight() {
+	public double getRight() {
 		return getX() + getWidth();
 	}
 
-
-	public float[] getVelocity() {
+	public double[] getVelocity() {
 		return calculateVelocity(getDestinationX(), getDestinationY());
 	}
 
 	public void setVelocity() {
-		float[] velocity = calculateVelocity(getDestinationX(), getDestinationY());
-		setVelX(velocity[0]);
-		setVelY(velocity[1]);
-
-	}
-	
-	public void setVelocity(float[] velocity) {
+		double[] velocity = calculateVelocity(getDestinationX(), getDestinationY());
 		setVelX(velocity[0]);
 		setVelY(velocity[1]);
 
 	}
 
-	public Rectangle getNextStep() {
-		float[] velocity = getVelocity();
-		return new Rectangle((int) (getX() + (int) velocity[0]), (int) (getY() + (int) velocity[1]), (int) getWidth(), (int) getHeight());
+	public void setVelocity(double[] velocity) {
+		setVelX(velocity[0]);
+		setVelY(velocity[1]);
+
+	}
+
+	public Rectangle2D getNextStep() {
+		return new Rectangle2D.Double((getX() + getVelX()), (getY() + getVelY()), getWidth(), getHeight());
 	}
 
 	public boolean isAtDestination() {
@@ -144,39 +134,12 @@ public abstract class GameObject {
 		return dest.intersects(pos);
 	}
 
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
+	public double getY() {
 		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
-
-	public float getWidth() {
-		return width;
-	}
-
-	public void setWidth(float width) {
-		if (this instanceof Player) {
-			System.out.println("GameObject.setWidth()");
-		}
-		this.width = width;
-	}
-
-	public float getHeight() {
-		return height;
-	}
-
-	public void setHeight(float height) {
-		this.height = height;
 	}
 
 	public Texture getTexture() {
@@ -195,23 +158,7 @@ public abstract class GameObject {
 		this.garbage = garbage;
 	}
 
-	public float getDestinationX() {
-		return destinationX;
-	}
-
-	public void setDestinationX(float destinationX) {
-		this.destinationX = destinationX;
-	}
-
-	public float getDestinationY() {
-		return destinationY;
-	}
-
-	public void setDestinationY(float destinationY) {
-		this.destinationY = destinationY;
-	}
-
-	public void setDestination(float x, float y) {
+	public void setDestination(double x, double y) {
 		setDestinationX(x);
 		setDestinationY(y);
 	}
@@ -222,22 +169,6 @@ public abstract class GameObject {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
-	}
-
-	public float getVelX() {
-		return velX;
-	}
-
-	public void setVelX(float velX) {
-		this.velX = velX;
-	}
-
-	public float getVelY() {
-		return velY;
-	}
-
-	public void setVelY(float velY) {
-		this.velY = velY;
 	}
 
 	public Movement getMovement() {
@@ -281,12 +212,12 @@ public abstract class GameObject {
 	public void setCollidingAtNextStep(boolean collidingAtNextStep) {
 		this.collidingAtNextStep = collidingAtNextStep;
 	}
-	
+
 	public boolean isCollidingWith(GameObject otherObject) {
 		return this.getBounds().intersects(otherObject.getBounds());
-		
+
 	}
-	
+
 	public boolean isCollidingAtNextStepWith(GameObject otherObject) {
 		return this.getNextStep().intersects(otherObject.getBounds());
 	}
@@ -300,5 +231,61 @@ public abstract class GameObject {
 	public abstract void destroy();
 
 	public abstract void resolveCollision(ArrayList<GameObject> gameObject);
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getVelX() {
+		return velX;
+	}
+
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+
+	public double getVelY() {
+		return velY;
+	}
+
+	public void setVelY(double velY) {
+		this.velY = velY;
+	}
+
+	public double getDestinationX() {
+		return destinationX;
+	}
+
+	public void setDestinationX(double destinationX) {
+		this.destinationX = destinationX;
+	}
+
+	public double getDestinationY() {
+		return destinationY;
+	}
+
+	public void setDestinationY(double destinationY) {
+		this.destinationY = destinationY;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
 
 }

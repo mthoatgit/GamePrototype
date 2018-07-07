@@ -1,6 +1,7 @@
 package de.mth.game.collision;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 
@@ -67,14 +68,29 @@ public class CollisionResolver {
 			// Mit sich selbst?
 			if (!checkObject.equals(collidableObject)) {
 
+			
+				
 				// Kollision beim nächsten Step?
 				if (checkObject instanceof Player) {
-					Rectangle nextStep = checkObject.getNextStep();
-					if (checkObject.getNextStep().intersects(collidableObject.getBounds())) {
+					
+					
+					Rectangle2D actual = checkObject.getBounds();
+					Rectangle2D nextStep = checkObject.getNextStep();
+					Rectangle2D bounds = collidableObject.getBounds();
+					
+					if(actual.intersects(bounds)) {
+						System.out.println("actual intersects with bounds");
+					}
+					
+					if (nextStep.intersects(bounds)) {
+						if(actual.intersects(bounds)) {
+							System.out.println("actual collided");
+						}else if(nextStep.intersects(bounds) && actual.intersects(bounds)){
+							System.out.println("nextStep collided but actual not");
+						}
 						
 						GameObject collidedObject = collidableObjectsList.get(j);
 						collidedObjectsList.add(collidedObject);
-						System.out.println("checkobject " + checkObject.getVelocity()[0] + " " + checkObject.getVelocity()[1]);
 						
 						
 					}
