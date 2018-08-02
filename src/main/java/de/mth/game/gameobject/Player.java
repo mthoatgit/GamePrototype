@@ -14,7 +14,7 @@ import de.mth.game.common.Input;
 import de.mth.game.texture.Animation;
 import de.mth.game.texture.TextureLoader;
 
-public class Player extends MoveableGameObject {
+public class Player extends GameObject {
 
 	private Animation walkUp;
 	private Animation walkDown;

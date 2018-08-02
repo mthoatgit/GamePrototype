@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,7 +13,7 @@ import de.mth.game.collision.CollisionResolver;
 import de.mth.game.common.GameModel;
 import de.mth.game.gameobject.GameObject;
 import de.mth.game.gameobject.Mountain;
-import de.mth.game.gameobject.NPC;
+import de.mth.game.gameobject.NonPlayer;
 import de.mth.game.gameobject.Player;
 
 public class PlayerResolveCollisionTest {
@@ -40,7 +39,7 @@ private static CollisionResolver collisionResolver;
 		Mountain mountain1 = new Mountain(30, 30); //Top Collision
 		Mountain mountain2 = new Mountain(30, 90); //Bottom Collision
 		
-		NPC npc = new NPC(300, 300); //No Collision
+		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		allObjects.add(player);
 		allObjects.add(mountain1);
 		allObjects.add(mountain2);
@@ -69,7 +68,7 @@ private static CollisionResolver collisionResolver;
 		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 //		Mountain mountainRight = new Mountain(70, 60); //Right Collision
 		
-		NPC npc = new NPC(300, 300); //No Collision
+		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
 		allObjects.add(mountainTop);
@@ -100,7 +99,7 @@ private static CollisionResolver collisionResolver;
 //		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 		Mountain mountainRight = new Mountain(70, 60); //Right Collision
 		
-		NPC npc = new NPC(300, 300); //No Collision
+		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
 		allObjects.add(mountainTop);
@@ -131,7 +130,7 @@ private static CollisionResolver collisionResolver;
 //		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 		Mountain mountainRight = new Mountain(70, 60); //Right Collision
 		
-		NPC npc = new NPC(300, 300); //No Collision
+		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
 		allObjects.add(mountainTop);
@@ -162,7 +161,7 @@ private static CollisionResolver collisionResolver;
 		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 		Mountain mountainRight = new Mountain(70, 60); //Right Collision
 		
-		NPC npc = new NPC(300, 300); //No Collision
+		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
 //		allObjects.add(mountainTop);

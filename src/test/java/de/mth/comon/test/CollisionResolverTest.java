@@ -7,16 +7,12 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.verification.AtLeast;
-import org.mockito.verification.VerificationMode;
 
 import de.mth.game.collision.CollisionResolver;
 import de.mth.game.common.GameModel;
 import de.mth.game.gameobject.GameObject;
 import de.mth.game.gameobject.Mountain;
-import de.mth.game.gameobject.NPC;
+import de.mth.game.gameobject.NonPlayer;
 import de.mth.game.gameobject.Player;
 
 public class CollisionResolverTest {
@@ -34,7 +30,7 @@ public class CollisionResolverTest {
 		player = new Player(40, 60);
 		Mountain mountain1 = new Mountain(30, 30);
 		Mountain mountain2 = new Mountain(62, 90);
-		NPC npc = new NPC(300, 300);
+		NonPlayer npc = new NonPlayer(300, 300);
 		allObjects.add(player);
 		allObjects.add(mountain1);
 		allObjects.add(mountain2);

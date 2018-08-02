@@ -7,19 +7,25 @@ import java.util.*;
 
 import de.mth.game.texture.*;
 
-public class NPC extends MoveableGameObject {
+public class NonPlayer extends GameObject {
 
 	private Animation playerWalk;
 
 	private State state = State.WANDER;
 
+	private Queue<Point> path;
+	
 	public enum State {
 		WANDER, MOVE, ATTACK, NONE;
 	}
 
-	public NPC(int x, int y) {
+	public NonPlayer(int x, int y) {
 		super(x, y);
 		setCollidable(true);
+		
+		this.path = new LinkedList<>();
+			testQueue();
+		
 	}
 
 	@Override
@@ -36,15 +42,20 @@ public class NPC extends MoveableGameObject {
 	@Override
 	public void update() {
 
-//		if (!isCollidingAtNextStep()) {
-//
-//			setVelocity(getVelocity());
-//		}
-//		setCollidingAtNextStep(false);
+	
 
 		if (isAtDestination()) {
 			setVelX(0);
 			setVelY(0);
+			Point p;
+			if(!path.isEmpty()) {
+				
+				p = path.poll();
+				setDestination(p.getX(), p.getY());
+			}else {
+					testQueue();
+			}
+			
 		}
 		x += getVelX();
 		y += getVelY();
@@ -60,7 +71,7 @@ public class NPC extends MoveableGameObject {
 	public void wander() {
 
 		Random random = new Random();
-		setDestination(random.nextInt(de.mth.game.common.Window.WIDTH), random.nextInt(de.mth.game.common.Window.WIDTH));
+//		setDestination(random.nextInt(de.mth.game.common.Window.WIDTH), random.nextInt(de.mth.game.common.Window.WIDTH));
 
 	}
 
@@ -113,44 +124,21 @@ public class NPC extends MoveableGameObject {
 
 		correctVelocity();
 		
+	}
+	
+	public void createPath() {
 		
-//		if (gameObjects.size() != 0) {
-//			GameObject gameObject = gameObjects.get(0);
-//
-//			setCollidingAtNextStep(true);
-//			if (gameObject instanceof Bullet) {
-//				destroy();
-//			}
-//
-//			if (gameObject instanceof Player || gameObject instanceof Mountain) {
-//				gameObject.setCollidingAtNextStep(true);
-//				dodge(gameObject);
-//
-//			}
-//		}
+	}
+	
+	public void testQueue(){
+		
+		path.add(new Point(100,100));
+		path.add(new Point(200,100));
+		path.add(new Point(200,200));
+		path.add(new Point(100,200));
+		
+	
 	}
 
-	public void dodge(GameObject gameObject) {
-		setVelocity(getVelocity());
-
-//		if (isCollidingTop(gameObject)) {
-//			setVelY(0);
-//			// System.out.println("npc.top()");
-//		}
-//		if (isCollidingBottom(gameObject)) {
-//			setVelY(0);
-//			// setVelY(0);
-//
-//			// System.out.println("npc.bottom()");
-//		}
-//		if (isCollidingLeft(gameObject)) {
-//			setVelX(0);
-//			// System.out.println("npc.left()");
-//		}
-//		if (isCollidingRight(gameObject)) {
-//			setVelX(0);
-//			// System.out.println("npc.right()");
-//		}
-	}
 
 }

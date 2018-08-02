@@ -178,11 +178,11 @@ public class GameModel {
 				int blue = (pixel) & 0xff;
 
 				if (red == 0 && green == 0 & blue == 255) { // Blau
-					createNPC(xx * 32, yy * 32);
+					createNonPlayer(xx * 32, yy * 32);
 
 				}
 //				if (red == 255 && green == 255 & blue == 0) { // Grün
-//					createNPC(xx * 32, yy * 32);
+//					createNonPlayer(xx * 32, yy * 32);
 //				}
 				if (red == 255 && green == 0 & blue == 0) { // Rot
 					// createPlayer(xx * 32, yy * 32);
@@ -210,8 +210,8 @@ public class GameModel {
 		gameObjects.add(p);
 	}
 
-	private void createNPC(int x, int y) {
-		NPC npc = new NPC(x, y);
+	private void createNonPlayer(int x, int y) {
+		NonPlayer npc = new NonPlayer(x, y);
 		gameObjects.add(npc);
 
 	}
