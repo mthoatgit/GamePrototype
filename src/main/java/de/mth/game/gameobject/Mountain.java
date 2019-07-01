@@ -2,10 +2,11 @@ package de.mth.game.gameobject;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Mountain extends GameObjectBase {
+public class Mountain extends GameObject {
 
 	public Mountain(int x, int y) {
 		super(x, y);
@@ -36,15 +37,9 @@ public class Mountain extends GameObjectBase {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
+	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resolveCollision(GameObject gameObject) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

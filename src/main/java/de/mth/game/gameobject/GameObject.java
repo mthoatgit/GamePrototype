@@ -1,62 +1,422 @@
 package de.mth.game.gameobject;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.util.*;
 
-import de.mth.game.texture.TextureLoader;
+import de.mth.game.collision.CollisionDirectionDetector;
+import de.mth.game.collision.CollisionDirectionDetector.Direction;
+import de.mth.game.pathfinding.*;
+import de.mth.game.texture.*;
 
-public interface GameObject {
+public abstract class GameObject {
 
-	public float getX();
+	protected double x, y;
 
-	public float getY();
+	private boolean garbage = false;
 
-	public float getWidth();
+	private Texture texture;
 
-	public float getHeight();
+	protected double width, height;
 
-	public Rectangle getBounds();
+	private double speed;
 
-	public void defineTextures(TextureLoader textureLoader);
+	protected double velX, velY;
 
-	public void render(Graphics g);
+	protected double destinationX, destinationY;
 
-	public void update();
+	protected boolean colliding = false;
+	protected boolean collidingAtNextStep = false;
+	
+	private boolean collidingLeft = false;
+	private boolean collidingRight = false;
+	private boolean collidingTop = false;
+	private boolean collidingBottom = false;
+	
 
-	public boolean isGarbage();
+	public enum Movement {
+		UP, DOWN, LEFT, RIGHT;
+	}
 
-	public void setGarbage(boolean garbage);
+	public Movement movement = Movement.DOWN;
 
-	public void destroy();
+	private boolean collidable;
 
-	public boolean isCollidable();
+	protected GameObject collidedObject;
 
-	public void setCollidable(boolean collidable);
+	public GameObject(int x, int y) {
+		setPosition(x, y);
+		setDestination(x, y);
+		this.speed = 1;
+		this.velX = 0;
+		this.velY = 0;
 
-	public boolean isColliding();
+		setCollidable(false);
+		setGarbage(false);
 
-	public void setColliding(boolean colliding);
+		// Texture
+		defineTextures(TextureLoader.getInstance());
+		if (getTexture() != null) {
+			this.width = getTexture().getSprite(0, 0).getWidth();
+			this.height = getTexture().getSprite(0, 0).getHeight();
+		}
 
-	public boolean isCollidingAtNextStep();
+	}
 
-	public void setCollidingAtNextStep(boolean collidingAtNextStep);
+	private void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 
-	public GameObject getCollidedObject();
+	public Rectangle2D getBounds() {
+		return new Rectangle2D.Double( getX(),  getY(),  getWidth(),  getHeight());
+	}
 
-	public void setCollidedObject(GameObject gameObject);
+	public void drawBounds(Graphics g) {
+		Rectangle2D b = getBounds();
+		g.setColor(Color.BLUE);
+		g.drawRect((int)b.getX(), (int)b.getY(), (int)b.getWidth(), (int)b.getHeight());
+	}
 
-	public void resolveCollision(GameObject gameObject);
+	public double[] calculateVelocity(double destX, double destY) {
+		double dx = destX - ((double) getX());
+		double dy = destY - ((double) getY());
 
-	public boolean equals(Rectangle rect);
+		// Satz des Pythagoras
+		double length = (double) Math.sqrt(dx * dx + dy * dy);
 
-	public float[] getVelocity();
+		// Aufteilung auf x- und y-Achse
+		dx /= length;
+		dy /= length;
 
-	public Rectangle getNextStep();
+		// Speed
+		dx *= speed;
+		dy *= speed;
 
-	public void setPerceptionRange(int perceptionRange);
+		double[] vel = new double[2];
+		vel[0] = dx;
+		vel[1] = dy;
+		return vel;
+	}
 
-	public float getBottom();
+	public double getTop() {
+		return getY();
+	}
 
-	public float getRight();
+	public double getBottom() {
+		return getY() + getHeight();
+	}
+
+	public double getLeft() {
+		return getX();
+	}
+
+	public double getRight() {
+		return getX() + getWidth();
+	}
+
+	public double[] getVelocity() {
+		return calculateVelocity(getDestinationX(), getDestinationY());
+	}
+
+	public void setVelocity() {
+		double[] velocity = calculateVelocity(getDestinationX(), getDestinationY());
+		setVelX(velocity[0]);
+		setVelY(velocity[1]);
+
+	}
+
+	public void setVelocity(double[] velocity) {
+		setVelX(velocity[0]);
+		setVelY(velocity[1]);
+
+	}
+
+	public Rectangle2D getNextStep() {
+		return new Rectangle2D.Double((getX() + getVelX()), (getY() + getVelY()), getWidth(), getHeight());
+	}
+
+	public boolean isAtDestination() {
+		Rectangle dest = new Rectangle((int) getDestinationX() - 1, (int) getDestinationY() - 1, 2, 2);
+		Rectangle pos = new Rectangle((int) getX() - 1, (int) getY() - 1, 2, 2);
+		return dest.intersects(pos);
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+
+	public boolean isGarbage() {
+		return garbage;
+	}
+
+	public void setGarbage(boolean garbage) {
+		this.garbage = garbage;
+	}
+
+	public void setDestination(double x, double y) {
+		setDestinationX(x);
+		setDestinationY(y);
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public Movement getMovement() {
+		return movement;
+	}
+
+	public void setMovement(Movement movement) {
+		this.movement = movement;
+	}
+
+	public boolean isCollidable() {
+		return collidable;
+
+	}
+
+	public void setCollidable(boolean collidable) {
+		this.collidable = collidable;
+	}
+
+	public boolean isColliding() {
+		return colliding;
+	}
+
+	public void setColliding(boolean colliding) {
+		this.colliding = colliding;
+	}
+
+	public GameObject getCollidedObject() {
+		return collidedObject;
+	}
+
+	public void setCollidedObject(GameObject gameObject) {
+		this.collidedObject = gameObject;
+
+	}
+
+	public boolean isCollidingAtNextStep() {
+		return collidingAtNextStep;
+	}
+
+	public void setCollidingAtNextStep(boolean collidingAtNextStep) {
+		this.collidingAtNextStep = collidingAtNextStep;
+	}
+
+	public boolean isCollidingWith(GameObject otherObject) {
+		return this.getBounds().intersects(otherObject.getBounds());
+
+	}
+
+	public boolean isCollidingAtNextStepWith(GameObject otherObject) {
+		return this.getNextStep().intersects(otherObject.getBounds());
+	}
+
+	public abstract void defineTextures(TextureLoader textureLoader);
+
+	public abstract void render(Graphics g);
+
+	public abstract void update();
+
+	public abstract void destroy();
+
+	public abstract void resolveCollision(ArrayList<GameObject> gameObject);
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getVelX() {
+		return velX;
+	}
+
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+
+	public double getVelY() {
+		return velY;
+	}
+
+	public void setVelY(double velY) {
+		this.velY = velY;
+	}
+
+	public double getDestinationX() {
+		return destinationX;
+	}
+
+	public void setDestinationX(double destinationX) {
+		this.destinationX = destinationX;
+	}
+
+	public double getDestinationY() {
+		return destinationY;
+	}
+
+	public void setDestinationY(double destinationY) {
+		this.destinationY = destinationY;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	
+
+	public void correctVelocity() {
+		if (isCollidingLeft()) {
+			if (getVelX() < 0) {
+				setVelX(0);
+			}
+		}
+		if (isCollidingRight()) {
+			if (getVelX() > 0) {
+				setVelX(0);
+			}
+		}
+		if (isCollidingTop()) {
+			if (getVelY() < 0) {
+				setVelY(0);
+			}
+		}
+		if (isCollidingBottom()) {
+			if (getVelY() > 0)
+				setVelY(0);
+		}
+	}
+
+	public void checkWallsAndCorners(ArrayList<GameObject> gameObjects) {
+		if ((isCollidingTop() || isCollidingBottom()) && (isCollidingRight() || isCollidingLeft())) {
+			if (getVelX() != 0 && getVelY() != 0) {
+				boolean isVerticalWall = isVerticalWall(gameObjects);
+				boolean isHorizontalWall = isHorizontalWall(gameObjects);
+				if (isHorizontalWall && !(isHorizontalWall && isVerticalWall)) {
+					setCollidingRight(false);
+					setCollidingLeft(false);
+				} else if (isVerticalWall && !(isHorizontalWall && isVerticalWall)) {
+					setCollidingTop(false);
+					setCollidingBottom(false);
+				}
+			}
+		}
+	}
+
+	public boolean isHorizontalWall(ArrayList<GameObject> gameObjects) {
+		for (GameObject x : gameObjects) {
+			for (GameObject y : gameObjects) {
+				if (!x.equals(y)) {
+					if (x.getY() == y.getY()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean isVerticalWall(ArrayList<GameObject> gameObjects) {
+		for (GameObject x : gameObjects) {
+			for (GameObject y : gameObjects) {
+				if (!x.equals(y)) {
+					if (x.getX() == y.getX()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public void getCollisionDirections(Rectangle2D nextStep, ArrayList<GameObject> gameObjects) {
+
+		for (GameObject gameObject : gameObjects) {
+
+			Direction direction = CollisionDirectionDetector.getDirection(nextStep, gameObject.getBounds());
+			switch (direction) {
+			case LEFT:
+				setCollidingLeft(true);
+				break;
+			case RIGHT:
+				setCollidingRight(true);
+				break;
+			case TOP:
+				setCollidingTop(true);
+				break;
+			case BOTTOM:
+				setCollidingBottom(true);
+				break;
+			default:
+			}
+
+		}
+	}
+
+	public boolean isCollidingLeft() {
+		return collidingLeft;
+	}
+
+	public void setCollidingLeft(boolean collidingLeft) {
+		this.collidingLeft = collidingLeft;
+	}
+
+	public boolean isCollidingRight() {
+		return collidingRight;
+	}
+
+	public void setCollidingRight(boolean collidingRight) {
+		this.collidingRight = collidingRight;
+	}
+
+	public boolean isCollidingTop() {
+		return collidingTop;
+	}
+
+	public void setCollidingTop(boolean collidingTop) {
+		this.collidingTop = collidingTop;
+	}
+
+	public boolean isCollidingBottom() {
+		return collidingBottom;
+	}
+
+	public void setCollidingBottom(boolean collidingBottom) {
+		this.collidingBottom = collidingBottom;
+	}
+
 
 }

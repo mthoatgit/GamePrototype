@@ -1,16 +1,17 @@
 package de.mth.game.gameobject;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import de.mth.game.texture.TextureLoader;
 
-public class Bullet extends GameObjectBase {
+public class Bullet extends GameObject {
 
-	public Bullet(int x, int y, float destX, float destY) {
+	public Bullet(int x, int y, double destX, double destY) {
 		super(x, y);
 		setSpeed(3);
 
-		float[] vel = getVelocity(destX, destY);
+		double[] vel = calculateVelocity(destX, destY);
 
 		setVelX(vel[0]);
 		setVelY(vel[1]);
@@ -46,15 +47,11 @@ public class Bullet extends GameObjectBase {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
+	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
-	@Override
-	public void resolveCollision(GameObject gameObject) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 }

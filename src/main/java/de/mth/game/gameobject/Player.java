@@ -2,6 +2,8 @@ package de.mth.game.gameobject;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import de.mth.game.common.Camera;
 import de.mth.game.common.Converter;
@@ -11,7 +13,7 @@ import de.mth.game.common.Input;
 import de.mth.game.texture.Animation;
 import de.mth.game.texture.TextureLoader;
 
-public class Player extends GameObjectBase {
+public class Player extends GameObject {
 
 	private Animation walkUp;
 	private Animation walkDown;
@@ -81,7 +83,7 @@ public class Player extends GameObjectBase {
 		Camera cam = gm.getCamera();
 
 		Converter converter = new Converter(gm);
-		float[] dest = converter.convertToGlobal(input.getMouseX(), input.getMouseY());
+		double[] dest = converter.convertToGlobal(input.getMouseX(), input.getMouseY());
 
 		gm.getGameObjects().add(new Bullet((int) getX(), (int) getY(), dest[0], dest[1]));
 	}
@@ -102,11 +104,11 @@ public class Player extends GameObjectBase {
 	@Override
 	public void update() {
 
-		if (!isCollidingAtNextStep()) {
-
-			setVelocity(getVelocity());
-		}
-		setCollidingAtNextStep(false);
+		// if (!isCollidingAtNextStep()) {
+		//
+		// setVelocity(getVelocity());
+		// }
+		// setCollidingAtNextStep(false);
 
 		if (isAtDestination()) {
 			setVelX(0);
@@ -123,50 +125,27 @@ public class Player extends GameObjectBase {
 	}
 
 	@Override
-	public void resolveCollision(GameObject gameObject) {
+	public void resolveCollision(ArrayList<GameObject> gameObjects) {
+		setCollidingLeft(false);
+		setCollidingRight(false);
+		setCollidingTop(false);
+		setCollidingBottom(false);
 
-		setCollidingAtNextStep(true);
-		// gameObject.setCollidingAtNextStep(true);
+		Rectangle2D nextStep = getNextStep();
 
-		// if (gameObject instanceof Mountain) {
-		// if (Game.DEBUG) {
-		// System.out.println("Player.resolveCollision()");
+		// if (gameObjects.size() > 2) {
+		// System.out.println("more than 2");
 		// }
-		// setVelX(0);
-		// setVelY(0);
-		//
-		// }
-		//
-		// if (gameObject instanceof NPC) {
-		//
-		// dodge(gameObject);
-		//
-		// }
+
+		getCollisionDirections(nextStep, gameObjects);
 
 		/*
-		 * TODO: Abfrage welche directions betroffen bzw. mehr als eine Richtung
-		 * -> ansonsten existiert ein Bug bei nebeneinanderliegenden Objekten
-		 * wie Mountain sodass der Player sich an den Objekten vorbeiglitched
+		 * Check ob der Player an einer Wand langläuft. (Wand = mehrere Objekte direkt
+		 * nebeneinander)
 		 */
+		checkWallsAndCorners(gameObjects);
 
-		if (isCollidingTop(gameObject)) {
-			setVelY(0);
-			// System.out.println("npc.top()");
-		}
-		if (isCollidingBottom(gameObject)) {
-			setVelY(0);
-			// setVelY(0);
-
-			// System.out.println("npc.bottom()");
-		}
-		if (isCollidingLeft(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.left()");
-		}
-		if (isCollidingRight(gameObject)) {
-			setVelX(0);
-			// System.out.println("npc.right()");
-		}
+		correctVelocity();
 
 	}
 
@@ -252,12 +231,6 @@ public class Player extends GameObjectBase {
 
 	public Movement getMovement() {
 		return movement;
-	}
-
-	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isAimModus() {

@@ -1,6 +1,7 @@
 package de.mth.game.collision;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class QuadTree {
 	 * completely fit within a child node and is part of the parent node
 	 */
 	private int getIndex(GameObject gameObject) {
-		Rectangle pRect = gameObject.getBounds();
+		Rectangle2D pRect = gameObject.getBounds();
 
 		int index = -1;
 		double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);

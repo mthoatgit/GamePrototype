@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import de.mth.game.texture.Part;
 import de.mth.game.texture.TextureLoader;
 
-public class House extends GameObjectBase {
+public class House extends GameObject {
 
 	ArrayList<Part> parts;
 
@@ -104,15 +104,9 @@ public class House extends GameObjectBase {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
+	public void resolveCollision(ArrayList<GameObject> gameObject) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resolveCollision(GameObject gameObject) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

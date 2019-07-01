@@ -1,17 +1,11 @@
 package de.mth.game.common;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.image.*;
+import java.util.*;
 
-import de.mth.game.gameobject.Entrance;
-import de.mth.game.gameobject.GameObject;
-import de.mth.game.gameobject.Grass;
-import de.mth.game.gameobject.House;
-import de.mth.game.gameobject.Mountain;
-import de.mth.game.gameobject.NPC;
-import de.mth.game.gameobject.Player;
-import de.mth.game.texture.BufferedImageLoader;
+import de.mth.game.gameobject.*;
+import de.mth.game.texture.*;
 
 public class GameModel {
 
@@ -68,14 +62,14 @@ public class GameModel {
 		return gameObjects;
 	}
 
-	public ArrayList<Rectangle> getBounds() {
-		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
-		for (int i = 0; i < getGameObjects().size(); i++) {
-			bounds.add(getGameObjects().get(i).getBounds());
-
-		}
-		return bounds;
-	}
+//	public ArrayList<Rectangle> getBounds() {
+//		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
+//		for (int i = 0; i < getGameObjects().size(); i++) {
+//			bounds.add(getGameObjects().get(i).getBounds());
+//
+//		}
+//		return bounds;
+//	}
 
 	private void loadGame() {
 		BufferedImageLoader loader = new BufferedImageLoader();
@@ -100,6 +94,40 @@ public class GameModel {
 	public void setInput(Input input) {
 		this.input = input;
 	}
+	
+	public ArrayList<GameObject> getAllCollidableGameObjects() {
+		ArrayList<GameObject> allCollidableGameObjects = new ArrayList<>();
+		allCollidableGameObjects.addAll(getCollidableTerrain());
+		allCollidableGameObjects.addAll(getCollidableGameObjects());
+		return allCollidableGameObjects;
+	}
+	
+	private ArrayList<GameObject> getCollidableTerrain() {
+		GameObject[][] terrain = getTerrain();
+		ArrayList<GameObject> collidableTerrain = new ArrayList<>();
+		for (int col = 0; col < terrain.length; col++) {
+			for (int row = 0; row < terrain[0].length; row++) {
+				GameObject gameObject = terrain[col][row];
+				if (gameObject.isCollidable()) {
+					collidableTerrain.add(gameObject);
+				}
+			}
+		}
+		return collidableTerrain;
+	}
+
+	private ArrayList<GameObject> getCollidableGameObjects() {
+		ArrayList<GameObject> collidableGameObjects = new ArrayList<>();
+		for (int i = 0; i < getGameObjects().size(); i++) {
+			GameObject gameObject = getGameObjects().get(i);
+			if (getGameObjects().get(i).isCollidable()) {
+				collidableGameObjects.add(gameObject);
+			}
+		}
+		return collidableGameObjects;
+	}
+
+	
 
 	/*
 	 * Es muss ein Array sein aus Performance-Gründen. Bitte mach den Fehler
@@ -150,12 +178,12 @@ public class GameModel {
 				int blue = (pixel) & 0xff;
 
 				if (red == 0 && green == 0 & blue == 255) { // Blau
-					createNPC(xx * 32, yy * 32);
+					createNonPlayer(xx * 32, yy * 32);
 
 				}
-				if (red == 255 && green == 255 & blue == 0) { // Grün
-					createNPC(xx * 32, yy * 32);
-				}
+//				if (red == 255 && green == 255 & blue == 0) { // Grün
+//					createNonPlayer(xx * 32, yy * 32);
+//				}
 				if (red == 255 && green == 0 & blue == 0) { // Rot
 					// createPlayer(xx * 32, yy * 32);
 					Player p = new Player(xx * 32, yy * 32);
@@ -182,8 +210,8 @@ public class GameModel {
 		gameObjects.add(p);
 	}
 
-	private void createNPC(int x, int y) {
-		NPC npc = new NPC(x, y);
+	private void createNonPlayer(int x, int y) {
+		NonPlayer npc = new NonPlayer(x, y);
 		gameObjects.add(npc);
 
 	}

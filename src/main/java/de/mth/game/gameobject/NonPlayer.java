@@ -1,28 +1,31 @@
 package de.mth.game.gameobject;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.*;
+import java.util.*;
 
-import de.mth.game.common.Main;
-import de.mth.game.texture.Animation;
-import de.mth.game.texture.TextureLoader;
+import de.mth.game.texture.*;
 
-public class NPC extends GameObjectBase {
+public class NonPlayer extends GameObject {
 
 	private Animation playerWalk;
 
 	private State state = State.WANDER;
 
+	private Queue<Point> path;
+	
 	public enum State {
 		WANDER, MOVE, ATTACK, NONE;
 	}
 
-	public NPC(int x, int y) {
+	public NonPlayer(int x, int y) {
 		super(x, y);
 		setCollidable(true);
+		
+		this.path = new LinkedList<>();
+			testQueue();
+		
 	}
 
 	@Override
@@ -39,21 +42,26 @@ public class NPC extends GameObjectBase {
 	@Override
 	public void update() {
 
-		if (!isCollidingAtNextStep()) {
-
-			setVelocity(getVelocity());
-		}
-		setCollidingAtNextStep(false);
+	
 
 		if (isAtDestination()) {
 			setVelX(0);
 			setVelY(0);
+			Point p;
+			if(!path.isEmpty()) {
+				
+				p = path.poll();
+				setDestination(p.getX(), p.getY());
+			}else {
+					testQueue();
+			}
+			
 		}
 		x += getVelX();
 		y += getVelY();
 
 		if (isAtDestination()) {
-			wander();
+			 wander();
 
 		}
 
@@ -63,7 +71,7 @@ public class NPC extends GameObjectBase {
 	public void wander() {
 
 		Random random = new Random();
-		setDestination(random.nextInt(Main.WIDTH), random.nextInt(Main.HEIGHT));
+//		setDestination(random.nextInt(de.mth.game.common.Window.WIDTH), random.nextInt(de.mth.game.common.Window.WIDTH));
 
 	}
 
@@ -93,23 +101,44 @@ public class NPC extends GameObjectBase {
 	}
 
 	@Override
-	public void setPerceptionRange(int perceptionRange) {
-		// TODO Auto-generated method stub
+	public void resolveCollision(ArrayList<GameObject> gameObjects) {
 
+		setCollidingLeft(false);
+		setCollidingRight(false);
+		setCollidingTop(false);
+		setCollidingBottom(false);
+
+		Rectangle2D nextStep = getNextStep();
+
+		// if (gameObjects.size() > 2) {
+		// System.out.println("more than 2");
+		// }
+
+		getCollisionDirections(nextStep, gameObjects);
+
+		/*
+		 * Check ob der Player an einer Wand langläuft. (Wand = mehrere Objekte direkt
+		 * nebeneinander)
+		 */
+		checkWallsAndCorners(gameObjects);
+
+		correctVelocity();
+		
+	}
+	
+	public void createPath() {
+		
+	}
+	
+	public void testQueue(){
+		
+		path.add(new Point(100,100));
+		path.add(new Point(200,100));
+		path.add(new Point(200,200));
+		path.add(new Point(100,200));
+		
+	
 	}
 
-	@Override
-	public void resolveCollision(GameObject gameObject) {
-		setCollidingAtNextStep(true);
-		if (gameObject instanceof Bullet) {
-			destroy();
-		}
-
-		if (gameObject instanceof Player || gameObject instanceof Mountain) {
-			gameObject.setCollidingAtNextStep(true);
-			dodge(gameObject);
-
-		}
-	}
 
 }

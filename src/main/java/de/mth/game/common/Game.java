@@ -1,16 +1,12 @@
 package de.mth.game.common;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.*;
+import java.util.*;
 
-import de.mth.game.collision.QuadTree;
-import de.mth.game.gameobject.Bullet;
-import de.mth.game.gameobject.GameObject;
+import de.mth.game.collision.*;
+import de.mth.game.gameobject.*;
 
 public class Game extends AbstractGame {
 
@@ -26,6 +22,8 @@ public class Game extends AbstractGame {
 
 	private GameModel gm;
 
+	private CollisionResolver collisionResolver; 
+	
 	private GarbageCollector garbageCollector;
 
 	private Stage stage = Stage.GAME;
@@ -37,6 +35,8 @@ public class Game extends AbstractGame {
 	protected void init() {
 		gm = new GameModel();
 
+		collisionResolver = new CollisionResolver();
+		
 		garbageCollector = new GarbageCollector();
 
 		this.addKeyListener(gm.getInput());
@@ -44,7 +44,6 @@ public class Game extends AbstractGame {
 		this.addMouseMotionListener(gm.getInput());
 
 		this.requestFocus();
-
 	}
 
 	protected void input() {
@@ -73,19 +72,17 @@ public class Game extends AbstractGame {
 
 			ArrayList<GameObject> gameObjects = gm.getGameObjects();
 
-			// //TODO: Trennung von Konfiguration, Collision und Update
-			// for (int i = 0; i < gameObjects.size(); i++) {
-			// GameObject tempObject = gameObjects.get(i);
-			// tempObject.setV;
-			//
-			// }
-
-			checkCollision();
+			for(GameObject gameObject : gameObjects) {
+				gameObject.setVelocity();
+			}
+			
+			ArrayList<GameObject> allCollidableGameObjects = gm.getAllCollidableGameObjects();
+			Map<GameObject, ArrayList<GameObject>> objectsToResolveMap = collisionResolver.getCollidedObjects(allCollidableGameObjects);
+			collisionResolver.resolveCollisions(objectsToResolveMap);
 
 			for (int i = 0; i < gameObjects.size(); i++) {
 				GameObject tempObject = gameObjects.get(i);
 				tempObject.update();
-
 			}
 			break;
 		case MENU:
@@ -163,67 +160,6 @@ public class Game extends AbstractGame {
 		}
 	}
 
-	public void checkCollision() {
-		ArrayList<GameObject> allObjects = new ArrayList<GameObject>();
-
-		addCollidableGameObjects(allObjects);
-		addCollidableTerrain(allObjects);
-
-		QuadTree quad = new QuadTree(0, new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
-
-		quad.clear();
-		for (int i = 0; i < allObjects.size(); i++) {
-			quad.insert(allObjects.get(i));
-		}
-
-		List<GameObject> returnObjects = new ArrayList<GameObject>();
-		for (int i = 0; i < allObjects.size(); i++) {
-
-			// Return all objects that could collide with the given object
-			returnObjects.clear();
-			quad.retrieve(returnObjects, allObjects.get(i));
-
-			for (int j = 0; j < returnObjects.size(); j++) {
-
-				// getNextStep
-				Rectangle returnBounds = returnObjects.get(j).getNextStep();
-				Rectangle allObjectsBounds = allObjects.get(i).getNextStep();
-
-				if (returnBounds.intersects(allObjectsBounds)) {
-					// Same?
-					if (!allObjects.get(i).equals(returnObjects.get(j))) {
-
-						// allObjects.get(i).resolveCollision(returnObjects.get(j));
-						returnObjects.get(j).resolveCollision(allObjects.get(i));
-
-					}
-				}
-			}
-		}
-
-	}
-
-	private void addCollidableTerrain(ArrayList<GameObject> allObjects) {
-		GameObject[][] terrain = gm.getTerrain();
-		for (int col = 0; col < terrain.length; col++) {
-			for (int row = 0; row < terrain[0].length; row++) {
-				GameObject gameObject = terrain[col][row];
-				if (gameObject.isCollidable()) {
-					allObjects.add(gameObject);
-				}
-			}
-		}
-	}
-
-	private void addCollidableGameObjects(ArrayList<GameObject> allObjects) {
-		for (int i = 0; i < gm.getGameObjects().size(); i++) {
-			GameObject gameObject = gm.getGameObjects().get(i);
-			if (gm.getGameObjects().get(i).isCollidable()) {
-				allObjects.add(gameObject);
-			}
-		}
-	}
-
 	private int renderTerrain(Graphics g) {
 		GameObject[][] terrain = gm.getTerrain();
 
@@ -236,7 +172,7 @@ public class Game extends AbstractGame {
 					}
 					if (Game.DEBUG) {
 						if (t.isCollidable()) {
-							Rectangle h = t.getBounds();
+							Rectangle2D h = t.getBounds();
 							g.setColor(Color.BLACK);
 							g.drawRect((int) h.getX(), (int) h.getY(), (int) h.getWidth(), (int) h.getHeight());
 						}
@@ -256,13 +192,13 @@ public class Game extends AbstractGame {
 
 				if (Game.DEBUG) {
 					if (tempObject.isCollidable()) {
-						Rectangle h = tempObject.getBounds();
+						Rectangle2D h = tempObject.getBounds();
 						g.setColor(Color.BLACK);
 						g.drawRect((int) h.getX(), (int) h.getY(), (int) h.getWidth(), (int) h.getHeight());
 
-						g.setColor(Color.RED);
-						Rectangle nextStep = tempObject.getNextStep();
-						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
+						Rectangle2D nextStep = tempObject.getNextStep();
+//						g.setColor(Color.RED);
+//						g.drawRect((int) nextStep.getX(), (int) nextStep.getY(), (int) nextStep.getWidth(), (int) nextStep.getHeight());
 
 					}
 				}
@@ -274,7 +210,7 @@ public class Game extends AbstractGame {
 
 	public boolean isVisible(GameObject go) {
 		Camera cam = gm.getCamera();
-		Rectangle r = new Rectangle((int) (-cam.getX()), (int) (-cam.getY()), Main.WIDTH + 32, Main.HEIGHT + 32);
+		Rectangle r = new Rectangle((int) (-cam.getX()), (int) (-cam.getY()), Window.WIDTH + 32, Window.HEIGHT + 32);
 		if (r.intersects(go.getBounds())) {
 			return true;
 		}
