@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import de.mth.game.collision.CollisionDirectionDetector;
 import de.mth.game.common.Camera;
 import de.mth.game.common.Converter;
 import de.mth.game.common.Game;

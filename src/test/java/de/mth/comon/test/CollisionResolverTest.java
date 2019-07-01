@@ -25,7 +25,7 @@ public class CollisionResolverTest {
 	
 	@Before
 	public void setup() {
-		collisionResolver = new CollisionResolver(new GameModel());
+		collisionResolver = new CollisionResolver();
 		allObjects = new ArrayList<>();
 		player = new Player(40, 60);
 		Mountain mountain1 = new Mountain(30, 30);

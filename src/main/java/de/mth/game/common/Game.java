@@ -35,7 +35,7 @@ public class Game extends AbstractGame {
 	protected void init() {
 		gm = new GameModel();
 
-		collisionResolver = new CollisionResolver(gm);
+		collisionResolver = new CollisionResolver();
 		
 		garbageCollector = new GarbageCollector();
 

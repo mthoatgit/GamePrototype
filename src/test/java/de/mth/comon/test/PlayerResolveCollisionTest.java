@@ -7,10 +7,8 @@ import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import de.mth.game.collision.CollisionResolver;
-import de.mth.game.common.GameModel;
 import de.mth.game.gameobject.GameObject;
 import de.mth.game.gameobject.Mountain;
 import de.mth.game.gameobject.NonPlayer;
@@ -24,8 +22,7 @@ private static CollisionResolver collisionResolver;
 	
 	@BeforeClass
 	public static void setup() {
-		GameModel gameModel = Mockito.mock(GameModel.class);
-		collisionResolver = new CollisionResolver(gameModel);
+		collisionResolver = new CollisionResolver();
 	}
 	
 	@Test
@@ -95,16 +92,11 @@ private static CollisionResolver collisionResolver;
 		
 		
 		Mountain mountainTop = new Mountain(30, 30); //Top Collision
-		Mountain mountainBottom = new Mountain(30, 90); //Bottom Collision
-//		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 		Mountain mountainRight = new Mountain(70, 60); //Right Collision
-		
 		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
 		allObjects.add(mountainTop);
-//		allObjects.add(mountainBottom);
-//		allObjects.add(mountainLeft);
 		allObjects.add(mountainRight);
 		allObjects.add(npc);
 		
@@ -156,7 +148,6 @@ private static CollisionResolver collisionResolver;
 		player.setVelY(-1);
 		
 		
-		Mountain mountainTop = new Mountain(30, 30); //Top Collision
 		Mountain mountainBottom = new Mountain(30, 90); //Bottom Collision
 		Mountain mountainLeft = new Mountain(10, 60); //Left Collision
 		Mountain mountainRight = new Mountain(70, 60); //Right Collision
@@ -164,7 +155,6 @@ private static CollisionResolver collisionResolver;
 		NonPlayer npc = new NonPlayer(300, 300); //No Collision
 		
 		allObjects.add(player);
-//		allObjects.add(mountainTop);
 		allObjects.add(mountainBottom);
 		allObjects.add(mountainLeft);
 		allObjects.add(mountainRight);

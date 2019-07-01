@@ -10,12 +10,6 @@ import de.mth.game.gameobject.*;
 
 public class CollisionResolver {
 
-	private GameModel gameModel;
-
-	public CollisionResolver(GameModel gameModel) {
-		this.gameModel = gameModel;
-	}
-
 	public Map<GameObject, ArrayList<GameObject>> getCollidedObjects(ArrayList<GameObject> allObjects) {
 
 		Map<GameObject, ArrayList<GameObject>> objectsToResolveMap = new HashMap<>();
@@ -33,6 +27,7 @@ public class CollisionResolver {
 			collidableObjectsList.clear();
 			GameObject checkObject = allObjects.get(i);
 
+			// TODO: QUADTREE
 			// Return all objects that could collide with the given object
 			// collidableObjectsList = quad.retrieve(collidableObjectsList, checkObject);
 
@@ -46,10 +41,6 @@ public class CollisionResolver {
 		return objectsToResolveMap;
 	}
 
-	public void getCollidableObjects(ArrayList<GameObject> allObjects) {
-
-	}
-
 	public void resolveCollisions(Map<GameObject, ArrayList<GameObject>> objectsToResolveMap) {
 		objectsToResolveMap.forEach((k, v) -> k.resolveCollision(v));
 	}
@@ -61,51 +52,18 @@ public class CollisionResolver {
 
 			GameObject collidableObject = collidableObjectsList.get(j);
 
-			// // getNextStep
-			// Rectangle collidableObjectBounds = collidableObject.getNextStep();
-			// Rectangle checkObjectBounds = checkObject.getNextStep();
-
 			// Mit sich selbst?
 			if (!checkObject.equals(collidableObject)) {
 
 				// Kollision beim nächsten Step?
-
-				Rectangle2D actual = checkObject.getBounds();
 				Rectangle2D nextStep = checkObject.getNextStep();
 				Rectangle2D bounds = collidableObject.getBounds();
 
-				if (actual.intersects(bounds)) {
-					System.out.println("actual intersects with bounds");
-				}
-
 				if (nextStep.intersects(bounds)) {
-//					if (actual.intersects(bounds)) {
-//						System.out.println("actual collided");
-//					} else if (nextStep.intersects(bounds) && actual.intersects(bounds)) {
-//						System.out.println("nextStep collided but actual not");
-//					}
-
 					GameObject collidedObject = collidableObjectsList.get(j);
 					collidedObjectsList.add(collidedObject);
-
 				}
 
-				// // Kollision beim nächsten Step?
-				// if (checkObject.isCollidingAtNextStepWith(collidableObject)) {
-				//
-				// if (checkObject instanceof Player) {
-				// System.out.println("Player " + checkObject.getBounds());
-				// System.out.println("Player NextStep " + checkObject.getNextStep());
-				//
-				// if(collidableObject instanceof NPC) {
-				// System.out.println("collidable " + collidableObject.getBounds());
-				// }
-				// System.out.println("");
-				// }
-				//
-				// GameObject collidedObject = collidableObjectsList.get(j);
-				// collidedObjectsList.add(collidedObject);
-				// }
 			}
 
 		}
